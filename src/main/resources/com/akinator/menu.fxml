@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.akinator.controlador.MenuController"
+      styleClass="root-pane"
+      alignment="CENTER"
+      spacing="0"
+      prefWidth="700" prefHeight="520">
+
+    <!-- HEADER -->
+    <VBox styleClass="header" alignment="CENTER" spacing="6">
+        <Text text="🧞" styleClass="emoji-grande"/>
+        <Text text="AKINATOR" styleClass="titulo-principal"/>
+        <Text text="El genio que adivina tu personaje" styleClass="subtitulo"/>
+    </VBox>
+
+    <!-- ESTADÍSTICAS DEL ÁRBOL -->
+    <HBox styleClass="stats-bar" alignment="CENTER" spacing="40">
+        <VBox alignment="CENTER" spacing="2">
+            <Label fx:id="lblPersonajes" text="4" styleClass="stat-numero"/>
+            <Label text="personajes" styleClass="stat-label"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="2">
+            <Label fx:id="lblNodos" text="7" styleClass="stat-numero"/>
+            <Label text="nodos" styleClass="stat-label"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="2">
+            <Label fx:id="lblAltura" text="2" styleClass="stat-numero"/>
+            <Label text="altura" styleClass="stat-label"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="2">
+            <Label fx:id="lblMemoria" text="0" styleClass="stat-numero"/>
+            <Label text="rutas memo" styleClass="stat-label"/>
+        </VBox>
+    </HBox>
+
+    <!-- BOTONES -->
+    <VBox alignment="CENTER" spacing="16" styleClass="menu-botones">
+        <VBox.margin>
+            <Insets top="30"/>
+        </VBox.margin>
+
+        <Button fx:id="btnJugar"
+                text="▶  Jugar"
+                styleClass="btn-primario"
+                onAction="#onJugar"
+                prefWidth="260" prefHeight="52"/>
+
+        <Button text="📊  Ver personajes conocidos"
+                styleClass="btn-secundario"
+                onAction="#onVerPersonajes"
+                prefWidth="260" prefHeight="44"/>
+
+        <Button text="🗑  Reiniciar árbol"
+                styleClass="btn-peligro"
+                onAction="#onReiniciarArbol"
+                prefWidth="260" prefHeight="44"/>
+    </VBox>
+
+    <!-- FOOTER -->
+    <Label text="Estructuras de Datos II — Backtracking · Greedy · PD · Recursividad"
+           styleClass="footer-label"/>
+
+</VBox>

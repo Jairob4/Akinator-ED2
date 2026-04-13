@@ -1,0 +1,298 @@
+/* ── BASE ──────────────────────────────────────────────────────────────── */
+.root-pane {
+    -fx-background-color: #0f0f1a;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* ── HEADER MENÚ ────────────────────────────────────────────────────────── */
+.header {
+    -fx-background-color: linear-gradient(to bottom, #1a1a2e, #16213e);
+    -fx-padding: 30 20 20 20;
+}
+.emoji-grande   { -fx-font-size: 52px; }
+.titulo-principal {
+    -fx-font-size: 38px;
+    -fx-font-weight: bold;
+    -fx-fill: #c784f3;
+    -fx-effect: dropshadow(gaussian, #9b59b6, 12, 0.4, 0, 0);
+}
+.subtitulo {
+    -fx-font-size: 14px;
+    -fx-fill: #8888aa;
+}
+
+/* ── BARRA DE STATS ─────────────────────────────────────────────────────── */
+.stats-bar {
+    -fx-background-color: #16213e;
+    -fx-padding: 14 20 14 20;
+    -fx-border-color: #2a2a4a;
+    -fx-border-width: 1 0 1 0;
+}
+.stat-numero {
+    -fx-text-fill: #e0b0ff;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+.stat-label {
+    -fx-text-fill: #666688;
+    -fx-font-size: 11px;
+}
+
+/* ── BOTONES MENÚ ───────────────────────────────────────────────────────── */
+.menu-botones { -fx-padding: 0 0 20 0; }
+
+.btn-primario {
+    -fx-background-color: #7c3aed;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+.btn-primario:hover { -fx-background-color: #9b59b6; }
+
+.btn-secundario {
+    -fx-background-color: #1e3a5f;
+    -fx-text-fill: #a0c4ff;
+    -fx-font-size: 13px;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+.btn-secundario:hover { -fx-background-color: #2a4a7f; }
+
+.btn-peligro {
+    -fx-background-color: #3a1a1a;
+    -fx-text-fill: #ff6b6b;
+    -fx-font-size: 13px;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+.btn-peligro:hover { -fx-background-color: #5a2a2a; }
+
+.footer-label {
+    -fx-text-fill: #444466;
+    -fx-font-size: 10px;
+    -fx-padding: 14 0 10 0;
+}
+
+/* ── HEADER JUEGO ───────────────────────────────────────────────────────── */
+.header-juego {
+    -fx-background-color: #16213e;
+    -fx-padding: 12 20 12 20;
+    -fx-border-color: #2a2a4a;
+    -fx-border-width: 0 0 1 0;
+}
+.titulo-juego {
+    -fx-text-fill: #e0b0ff;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+.btn-volver {
+    -fx-background-color: transparent;
+    -fx-text-fill: #8888aa;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-border-color: #333355;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+.btn-volver:hover { -fx-text-fill: #e0b0ff; }
+.pregunta-contador {
+    -fx-text-fill: #666688;
+    -fx-font-size: 12px;
+}
+
+/* ── ÁREA DE JUEGO ──────────────────────────────────────────────────────── */
+.area-juego { -fx-padding: 30 40 20 40; }
+
+.burbuja-pregunta {
+    -fx-background-color: #1a1a2e;
+    -fx-background-radius: 20;
+    -fx-border-color: #7c3aed;
+    -fx-border-width: 2;
+    -fx-border-radius: 20;
+    -fx-padding: 24 32 24 32;
+    -fx-effect: dropshadow(gaussian, #7c3aed, 16, 0.3, 0, 0);
+    -fx-min-height: 90;
+}
+.texto-pregunta {
+    -fx-text-fill: #e8e8ff;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+/* ── BOTONES SÍ / NO ────────────────────────────────────────────────────── */
+.btn-si {
+    -fx-background-color: #1a5c2a;
+    -fx-text-fill: #55ff77;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+    -fx-border-color: #55ff77;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 12;
+}
+.btn-si:hover { -fx-background-color: #2a7a3a; }
+
+.btn-no {
+    -fx-background-color: #5c1a1a;
+    -fx-text-fill: #ff6b6b;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+    -fx-border-color: #ff6b6b;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 12;
+}
+.btn-no:hover { -fx-background-color: #7a2a2a; }
+
+/* ── PANEL ADIVINANZA ───────────────────────────────────────────────────── */
+.label-adivinanza-titulo {
+    -fx-text-fill: #ffd700;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+.label-personaje-adivinado {
+    -fx-text-fill: #e0b0ff;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, #9b59b6, 10, 0.4, 0, 0);
+}
+.label-confirmacion {
+    -fx-text-fill: #aaaacc;
+    -fx-font-size: 14px;
+}
+
+/* ── PANEL APRENDIZAJE ──────────────────────────────────────────────────── */
+.panel-aprendizaje {
+    -fx-background-color: #1a2a1a;
+    -fx-background-radius: 14;
+    -fx-border-color: #55ff77;
+    -fx-border-width: 1;
+    -fx-border-radius: 14;
+    -fx-padding: 20 28 20 28;
+}
+.label-aprender-titulo {
+    -fx-text-fill: #55ff77;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+.label-aprender-sub {
+    -fx-text-fill: #aaaaaa;
+    -fx-font-size: 12px;
+}
+.input-campo {
+    -fx-background-color: #0f0f1a;
+    -fx-text-fill: #e8e8ff;
+    -fx-prompt-text-fill: #444466;
+    -fx-border-color: #333355;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 13px;
+}
+.input-campo:focused {
+    -fx-border-color: #7c3aed;
+}
+
+/* ── FOOTER JUEGO ───────────────────────────────────────────────────────── */
+.footer-juego {
+    -fx-background-color: #0d0d18;
+    -fx-padding: 10 20 10 20;
+    -fx-border-color: #2a2a4a;
+    -fx-border-width: 1 0 0 0;
+}
+.metrica-label {
+    -fx-text-fill: #555577;
+    -fx-font-size: 11px;
+}
+.btn-retroceder {
+    -fx-background-color: #2a1a3a;
+    -fx-text-fill: #aa88cc;
+    -fx-font-size: 11px;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+.btn-retroceder:hover { -fx-background-color: #3a2a5a; }
+
+/* ── ESTADÍSTICAS ───────────────────────────────────────────────────────── */
+.header-stats {
+    -fx-background-color: linear-gradient(to bottom, #1a1a2e, #16213e);
+    -fx-padding: 24 20 16 20;
+}
+.titulo-resultado {
+    -fx-text-fill: #ffd700;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+.personaje-resultado {
+    -fx-text-fill: #e0b0ff;
+    -fx-font-size: 20px;
+}
+
+.tarjetas-container { -fx-padding: 16 20 8 20; }
+.tarjeta {
+    -fx-background-color: #1a1a2e;
+    -fx-background-radius: 12;
+    -fx-border-color: #2a2a4a;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-padding: 14 10 14 10;
+}
+.tarjeta-titulo {
+    -fx-text-fill: #666688;
+    -fx-font-size: 11px;
+}
+.tarjeta-valor {
+    -fx-text-fill: #e0b0ff;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.panel-complejidad {
+    -fx-background-color: #16213e;
+    -fx-padding: 14 20 14 20;
+    -fx-border-color: #2a2a4a;
+    -fx-border-width: 1 0 1 0;
+}
+.complejidad-titulo {
+    -fx-text-fill: #aaaacc;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+.complejidad-valor {
+    -fx-text-fill: #55ff77;
+    -fx-font-size: 14px;
+}
+.stats-extra { -fx-padding: 4 0 0 0; }
+.stat-extra-label {
+    -fx-text-fill: #555577;
+    -fx-font-size: 11px;
+}
+
+.panel-resumen {
+    -fx-padding: 10 20 10 20;
+}
+.resumen-titulo {
+    -fx-text-fill: #666688;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+.texto-resumen {
+    -fx-background-color: #0d0d18;
+    -fx-text-fill: #888899;
+    -fx-border-color: #2a2a4a;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-font-size: 12px;
+    -fx-font-family: "Consolas", monospace;
+}
+
+.footer-stats {
+    -fx-padding: 14 20 14 20;
+    -fx-border-color: #2a2a4a;
+    -fx-border-width: 1 0 0 0;
+}

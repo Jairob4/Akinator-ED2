@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.akinator.controlador.EstadisticasController"
+      styleClass="root-pane"
+      alignment="TOP_CENTER"
+      spacing="0"
+      prefWidth="700" prefHeight="520">
+
+    <!-- HEADER -->
+    <VBox styleClass="header-stats" alignment="CENTER" spacing="4">
+        <Label fx:id="lblTituloResultado" text="✅ ¡Adiviné!" styleClass="titulo-resultado"/>
+        <Label fx:id="lblPersonajeResultado" text="" styleClass="personaje-resultado"/>
+    </VBox>
+
+    <!-- TARJETAS DE MÉTRICAS -->
+    <HBox alignment="CENTER" spacing="16" styleClass="tarjetas-container">
+
+        <VBox styleClass="tarjeta" alignment="CENTER" spacing="6" prefWidth="140">
+            <Label text="⏱ Tiempo" styleClass="tarjeta-titulo"/>
+            <Label fx:id="lblTiempo" text="0 ms" styleClass="tarjeta-valor"/>
+        </VBox>
+
+        <VBox styleClass="tarjeta" alignment="CENTER" spacing="6" prefWidth="140">
+            <Label text="❓ Preguntas" styleClass="tarjeta-titulo"/>
+            <Label fx:id="lblPreguntas" text="0" styleClass="tarjeta-valor"/>
+        </VBox>
+
+        <VBox styleClass="tarjeta" alignment="CENTER" spacing="6" prefWidth="140">
+            <Label text="🌲 Profundidad" styleClass="tarjeta-titulo"/>
+            <Label fx:id="lblProfundidad" text="0" styleClass="tarjeta-valor"/>
+        </VBox>
+
+        <VBox styleClass="tarjeta" alignment="CENTER" spacing="6" prefWidth="140">
+            <Label text="💾 Memoria" styleClass="tarjeta-titulo"/>
+            <Label fx:id="lblMemoria" text="0 KB" styleClass="tarjeta-valor"/>
+        </VBox>
+
+    </HBox>
+
+    <!-- ANÁLISIS DE COMPLEJIDAD -->
+    <VBox styleClass="panel-complejidad" alignment="CENTER" spacing="8">
+        <Label text="📊 Análisis de Complejidad" styleClass="complejidad-titulo"/>
+        <Label fx:id="lblComplejidad" text="" styleClass="complejidad-valor"
+               wrapText="true" maxWidth="560" alignment="CENTER"/>
+        <HBox alignment="CENTER" spacing="30" styleClass="stats-extra">
+            <Label fx:id="lblTotalNodos"      text="Nodos: 0"      styleClass="stat-extra-label"/>
+            <Label fx:id="lblTotalPersonajes" text="Personajes: 0" styleClass="stat-extra-label"/>
+            <Label fx:id="lblRutasMemo"       text="Rutas memo: 0" styleClass="stat-extra-label"/>
+        </HBox>
+    </VBox>
+
+    <!-- RESUMEN TÉCNICO -->
+    <VBox styleClass="panel-resumen" alignment="CENTER" spacing="6" VBox.vgrow="ALWAYS">
+        <Label text="📋 Resumen técnico" styleClass="resumen-titulo"/>
+        <TextArea fx:id="txtResumen"
+                  editable="false"
+                  styleClass="texto-resumen"
+                  prefHeight="110"
+                  maxWidth="580"
+                  wrapText="true"/>
+    </VBox>
+
+    <!-- BOTONES -->
+    <HBox alignment="CENTER" spacing="20" styleClass="footer-stats">
+        <Button text="▶  Jugar de nuevo"
+                styleClass="btn-primario"
+                onAction="#onJugarDeNuevo"
+                prefWidth="200" prefHeight="46"/>
+        <Button text="🏠  Menú principal"
+                styleClass="btn-secundario"
+                onAction="#onMenu"
+                prefWidth="200" prefHeight="46"/>
+    </HBox>
+
+</VBox>

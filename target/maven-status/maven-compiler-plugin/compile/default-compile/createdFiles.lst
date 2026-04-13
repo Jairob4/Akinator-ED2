@@ -1,0 +1,8 @@
+com\akinator\modelo\NodoArbol.class
+com\akinator\modelo\ArbolDesicion.class
+com\akinator\persistencia\ArbolSerializer.class
+com\akinator\App.class
+com\akinator\ResultadoPartida.class
+com\akinator\controlador\EstadisticasController.class
+com\akinator\controlador\JuegoController.class
+com\akinator\controlador\MenuController.class

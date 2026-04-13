@@ -53,7 +53,7 @@ public class ArbolDesicion implements Serializable{
         NodoArbol einstein = new NodoArbol("Albert Einstein", true);
         NodoArbol napoleon = new NodoArbol("Napoleon Bonaparte", true);
         NodoArbol goku = new NodoArbol("Goku", true);
-        NodoArbol batman = new NodoArbol("Diego Maradona", true);
+        NodoArbol batman = new NodoArbol("Batman", true);
 
         // Nivel 1
         NodoArbol cientifico = new NodoArbol("¿Es o fue un científico?");
@@ -61,7 +61,7 @@ public class ArbolDesicion implements Serializable{
         cientifico.setHijoIzquierdo(napoleon); // respuesta "no" lleva a Napoleon
 
         NodoArbol poderes = new NodoArbol("¿Tiene poderes sobrenaturales?");
-        poderes.setHijoDerecho(batman); // respuesta "sí" lleva a Maradona
+        poderes.setHijoDerecho(batman); // respuesta "sí" lleva a Batman
         poderes.setHijoIzquierdo(goku); // respuesta "no" lleva a Goku
 
         // Nivel 0 (raíz)
@@ -133,7 +133,7 @@ public class ArbolDesicion implements Serializable{
         return true;
     }
 
-    private boolean puedoRetroceder() { // Esta seria el isValid de este backtracking, se puede retroceder si hay estados en la pila
+    public boolean puedoRetroceder() { // Esta seria el isValid de este backtracking, se puede retroceder si hay estados en la pila
         return !pilaEstados.isEmpty(); // Se puede retroceder si hay estados en la pila
     }
 
@@ -363,14 +363,14 @@ public class ArbolDesicion implements Serializable{
         r.setTotalNodos(contarNodos());
         r.setTotalPersonajes(contarPersonajes());
 
-        //  Tiempo real con System.nanoTime() 
+        // Tiempo real con System.nanoTime() 
         r.setTiempoNanos(System.nanoTime() - tiempoInicio);
 
-        // ── Memoria real con Runtime 
+        // Memoria real con Runtime 
         Runtime rt = Runtime.getRuntime();
         r.setMemoriaBytes(rt.totalMemory() - rt.freeMemory());
 
-        //  Programación dinámica: rutas memorizadas 
+        // Programación dinámica: rutas memorizadas 
         r.setTamanioMemo(memoria.size());
 
         return r;
