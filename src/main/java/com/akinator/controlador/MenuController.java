@@ -1,7 +1,7 @@
 package com.akinator.controlador;
 
 import com.akinator.App;
-import com.akinator.persistencia.ArbolSerializer;
+import com.akinator.service.MenuService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -11,27 +11,37 @@ import java.util.ResourceBundle;
 
 public class MenuController implements Initializable {
 
+    // ── SERVICIOS ─────────────────────────────────────────────────────────
+    private MenuService menuService;
+
+    // ── FXML ──────────────────────────────────────────────────────────────
     @FXML private Label lblPersonajes;
     @FXML private Label lblNodos;
     @FXML private Label lblAltura;
     @FXML private Label lblMemoria;
 
+    // ── INYECCIÓN DE DEPENDENCIAS ─────────────────────────────────────────
+    public void setMenuService(MenuService menuService) {
+        this.menuService = menuService;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        actualizarStats();
+        if (menuService != null) {
+            actualizarStats();
+        }
     }
 
     private void actualizarStats() {
-        lblPersonajes.setText(String.valueOf(App.arbol.contarPersonajes()));
-        lblNodos.setText(String.valueOf(App.arbol.contarNodos()));
-        lblAltura.setText(String.valueOf(App.arbol.altura()));
-        lblMemoria.setText(String.valueOf(App.arbol.getTamanioMemoria()));
+        lblPersonajes.setText(String.valueOf(menuService.contarPersonajes()));
+        lblNodos.setText(String.valueOf(menuService.contarNodos()));
+        lblAltura.setText(String.valueOf(menuService.obtenerAltura()));
+        lblMemoria.setText(String.valueOf(menuService.getTamanioMemoria()));
     }
 
     @FXML
     private void onJugar() {
         try {
-            App.arbol.reiniciarPartida();
             App.mostrarJuego();
         } catch (Exception e) {
             mostrarError("Error al iniciar el juego: " + e.getMessage());
@@ -40,7 +50,7 @@ public class MenuController implements Initializable {
 
     @FXML
     private void onVerPersonajes() {
-        java.util.List<String> personajes = App.arbol.obtenerTodosPersonajes();
+        java.util.List<String> personajes = menuService.obtenerTodosPersonajes();
         String lista = personajes.isEmpty()
             ? "No hay personajes aún."
             : String.join("\n• ", personajes);
@@ -50,6 +60,15 @@ public class MenuController implements Initializable {
         alert.setHeaderText("El Akinator conoce " + personajes.size() + " personaje(s):");
         alert.setContentText("• " + lista);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void onVerArbol() {
+        try {
+            App.mostrarArbol();
+        } catch (Exception e) {
+            mostrarError("Error al mostrar el árbol: " + e.getMessage());
+        }
     }
 
     @FXML
@@ -63,12 +82,9 @@ public class MenuController implements Initializable {
         );
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            // Borrar archivo y crear árbol nuevo
-            java.io.File f = new java.io.File(
-                System.getProperty("user.home") + java.io.File.separator + "arbol.dat"
-            );
-            if (f.exists()) f.delete();
-            App.arbol = new com.akinator.modelo.ArbolDesicion();
+            menuService.reiniciarArbol();
+            // Recargar árbol en App
+            App.cargarArbol();
             actualizarStats();
         }
     }

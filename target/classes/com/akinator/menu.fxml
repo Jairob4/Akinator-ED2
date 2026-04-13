@@ -55,6 +55,11 @@
                 onAction="#onVerPersonajes"
                 prefWidth="260" prefHeight="44"/>
 
+        <Button text="🌲  Ver árbol de decisión"
+                styleClass="btn-secundario"
+                onAction="#onVerArbol"
+                prefWidth="260" prefHeight="44"/>
+
         <Button text="🗑  Reiniciar árbol"
                 styleClass="btn-peligro"
                 onAction="#onReiniciarArbol"
