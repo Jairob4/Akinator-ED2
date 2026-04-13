@@ -61,8 +61,8 @@ public class ArbolDesicion implements Serializable{
         cientifico.setHijoIzquierdo(napoleon); // respuesta "no" lleva a Napoleon
 
         NodoArbol poderes = new NodoArbol("¿Tiene poderes sobrenaturales?");
-        poderes.setHijoDerecho(batman); // respuesta "sí" lleva a Batman
-        poderes.setHijoIzquierdo(goku); // respuesta "no" lleva a Goku
+        poderes.setHijoDerecho(goku); // respuesta "sí" lleva a Goku
+        poderes.setHijoIzquierdo(batman); // respuesta "no" lleva a Batman
 
         // Nivel 0 (raíz)
         raiz.setHijoDerecho(cientifico); // respuesta "sí" lleva a científico
