@@ -2,6 +2,8 @@ package com.akinator.modelo;
 
 import java.io.Serializable;
 import java.util.*;
+
+import com.akinator.ResultadoPartida;
 /**
  * Árbol binario de decisión del Akinator.
  *
@@ -70,7 +72,7 @@ public class ArbolDesicion implements Serializable{
 
     }
 
-    private void reiniciarPartida() {
+    public void reiniciarPartida() {
         nodoActual = raiz;
         preguntasRealizadas = 0;
         profundidadActual = 0;
@@ -341,6 +343,37 @@ public class ArbolDesicion implements Serializable{
 
     public int getTamanioMemoria() {
         return memoria.size();
+    }
+
+    public ResultadoPartida generarResultado(boolean gano, boolean aprendio) {
+        ResultadoPartida r = new ResultadoPartida();
+
+        // ── Resultado del juego ───────────────────────────────────────────
+        r.setGanoAkinator(gano);
+        r.setAprendioNuevo(aprendio);
+        r.setPersonaje(
+            nodoActual != null ? nodoActual.getContenido() : "Desconocido"
+        );
+
+        // ── Métricas de recorrido ─────────────────────────────────────────
+        r.setPreguntasHechas(preguntasRealizadas);
+        r.setProfundidad(profundidadActual);
+
+        // ── Métricas del árbol (recursivas) ──────────────────────────────
+        r.setTotalNodos(contarNodos());
+        r.setTotalPersonajes(contarPersonajes());
+
+        // ── Tiempo real con System.nanoTime() ────────────────────────────
+        r.setTiempoNanos(System.nanoTime() - tiempoInicio);
+
+        // ── Memoria real con Runtime ──────────────────────────────────────
+        Runtime rt = Runtime.getRuntime();
+        r.setMemoriaBytes(rt.totalMemory() - rt.freeMemory());
+
+        // ── Programación dinámica: rutas memorizadas ──────────────────────
+        r.setTamanioMemo(memoria.size());
+
+        return r;
     }
 
     

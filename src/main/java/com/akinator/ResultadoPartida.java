@@ -13,6 +13,7 @@ public class ResultadoPartida {
     private boolean aprendioNuevo;
     private int     tamanioMemo;
 
+
     // ── Getters y Setters ─────────────────────────────────────────────────
     public boolean isGanoAkinator()              { return ganoAkinator; }
     public void    setGanoAkinator(boolean g)    { this.ganoAkinator = g; }
@@ -34,6 +35,9 @@ public class ResultadoPartida {
     public void    setAprendioNuevo(boolean a)   { this.aprendioNuevo = a; }
     public int     getTamanioMemo()              { return tamanioMemo; }
     public void    setTamanioMemo(int t)         { this.tamanioMemo = t; }
+
+
+    
 
     // ── Conversiones ──────────────────────────────────────────────────────
     public double getTiempoMs() {
@@ -73,4 +77,6 @@ public class ResultadoPartida {
             aprendioNuevo ? "Sí " : "No"
         );
     }
+
+    
 }

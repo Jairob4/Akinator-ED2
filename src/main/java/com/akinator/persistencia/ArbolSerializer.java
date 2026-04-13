@@ -6,7 +6,8 @@ import java.nio.file.*;
 
 public class ArbolSerializer {
 
-    private static final String RUTA = "arbol.dat";
+    private static final String RUTA =
+        System.getProperty("user.home") + File.separator + "arbol.dat";
 
     // Guardar el árbol en disco
     public static void guardar(ArbolDesicion arbol) {
@@ -20,15 +21,20 @@ public class ArbolSerializer {
 
     // Cargar el árbol desde disco (si no existe, crea uno nuevo)
     public static ArbolDesicion cargar() {
-        if (!Files.exists(Paths.get(RUTA))) {
-            return new ArbolDesicion();
-        }
-        try (ObjectInputStream ois = new ObjectInputStream(
-                new FileInputStream(RUTA))) {
-            return (ArbolDesicion) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Error al cargar: " + e.getMessage());
-            return new ArbolDesicion();
-        }
+    if (!Files.exists(Paths.get(RUTA))) {
+        return new ArbolDesicion();
     }
+
+    try (ObjectInputStream ois = new ObjectInputStream(
+            new FileInputStream(RUTA))) {
+
+        ArbolDesicion arbol = (ArbolDesicion) ois.readObject();
+        arbol.reiniciarPartida();
+        return arbol;
+
+    } catch (IOException | ClassNotFoundException e) {
+        System.err.println("Error al cargar: " + e.getMessage());
+        return new ArbolDesicion();
+    }
+}
 }
