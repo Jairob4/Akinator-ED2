@@ -284,6 +284,14 @@ public class ArbolDesicion implements Serializable{
           busca en la memoria si el personaje ya tiene una ruta.
           si la tiene la retorna en 0(1) por lo que la complejidad computacional baja significativamente
     */
+
+    public void memorizarAcierto(String personaje){
+        if(nodoActual == null || !nodoActual.isEsPersonaje()) return; // No hay personaje actual para memorizar
+        String nombrePersonaje = nodoActual.getContenido();
+        if(!memoria.containsKey(nombrePersonaje))
+            memoria.put(nombrePersonaje, reconstruirRutaDesdePila()); // Guardar la ruta actual para el personaje adivinado
+    }
+
     public List<Boolean> obtenerRutaPersonaje(String personaje) {
         if(memoria.containsKey(personaje)) {
             return memoria.get(personaje); // Retornar la ruta memorizada en O(1)
