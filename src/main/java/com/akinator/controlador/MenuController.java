@@ -1,7 +1,6 @@
 package com.akinator.controlador;
 
 import com.akinator.App;
-import com.akinator.persistencia.ArbolSerializer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;

@@ -2,7 +2,8 @@ package com.akinator.controlador;
 
 import com.akinator.App;
 import com.akinator.ResultadoPartida;
-import com.akinator.persistencia.ArbolSerializer;
+import com.akinator.service.JuegoService;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -11,6 +12,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class JuegoController implements Initializable {
+
+    // ── SERVICIOS ─────────────────────────────────────────────────────────
+    private JuegoService juegoService;
 
     // ── FXML ──────────────────────────────────────────────────────────────
     @FXML private Label    lblPregunta;
@@ -26,9 +30,16 @@ public class JuegoController implements Initializable {
     @FXML private Label    lblMetricaMemoria;
     @FXML private Button   btnRetroceder;
 
+    // ── INYECCIÓN DE DEPENDENCIAS ─────────────────────────────────────────
+    public void setJuegoService(JuegoService juegoService) {
+        this.juegoService = juegoService;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        actualizarUI();
+        if (juegoService != null) {
+            actualizarUI();
+        }
     }
 
     // ─────────────────────────────────────────────────────────────────────
@@ -42,28 +53,28 @@ public class JuegoController implements Initializable {
     private void onNo() { responder(false); }
 
     private void responder(boolean esSi) {
-        App.arbol.responder(esSi);
+        juegoService.responder(esSi);
         actualizarUI();
     }
 
     private void actualizarUI() {
         // Actualizar métricas en tiempo real
-        int preguntas = App.arbol.getPreguntasRealizadas();
-        long ms = App.arbol.getTiempoPartida() / 1_000_000;
-        int memo  = App.arbol.getTamanioMemoria();
+        int preguntas = juegoService.getPreguntasRealizadas();
+        long ms = juegoService.getTiempoPartida() / 1_000_000;
+        int memo = juegoService.getTamanioMemoria();
 
         lblMetricaPreguntas.setText("Preguntas: " + preguntas);
         lblMetricaTiempo.setText("Tiempo: " + ms + "ms");
         lblMetricaMemoria.setText("Memo: " + memo);
         lblPreguntaNum.setText("Pregunta " + (preguntas + 1));
-        btnRetroceder.setDisable(!App.arbol.puedoRetroceder());
+        btnRetroceder.setDisable(!juegoService.puedoRetroceder());
 
-        if (App.arbol.juegoTerminado()) {
+        if (juegoService.juegoTerminado()) {
             // Llegamos a una hoja → mostrar panel de adivinanza
             mostrarAdivinanza();
         } else {
             // Mostrar pregunta normal
-            lblPregunta.setText(App.arbol.getPreguntaActual());
+            lblPregunta.setText(juegoService.getPreguntaActual());
             mostrarPanel(panelRespuestas, true);
             mostrarPanel(panelAdivinanza, false);
             mostrarPanel(panelAprendizaje, false);
@@ -71,7 +82,7 @@ public class JuegoController implements Initializable {
     }
 
     private void mostrarAdivinanza() {
-        String personaje = App.arbol.getPreguntaActual();
+        String personaje = juegoService.getPreguntaActual();
         lblPersonajeAdivinado.setText("¿Es " + personaje + "?");
         lblPregunta.setText("¡Creo que lo sé!");
         mostrarPanel(panelRespuestas,  false);
@@ -86,8 +97,7 @@ public class JuegoController implements Initializable {
     @FXML
     private void onAcertó() {
         // Akinator ganó
-        ResultadoPartida r = App.arbol.generarResultado(true, false);
-        ArbolSerializer.guardar(App.arbol);
+        ResultadoPartida r = juegoService.generarResultado(true, false);
         try {
             App.mostrarEstadisticas(r);
         } catch (Exception e) {
@@ -129,14 +139,11 @@ public class JuegoController implements Initializable {
         if (!nuevaPregunta.endsWith("?"))
             nuevaPregunta += "?";
 
-        // Aprender el nuevo personaje (backtracking + PD)
-        App.arbol.aprenderPersonaje(nuevoPersonaje, nuevaPregunta, respuestaEsSi);
-
-        // Guardar árbol actualizado en disco
-        ArbolSerializer.guardar(App.arbol);
+        // Aprender el nuevo personaje
+        juegoService.aprender(nuevoPersonaje, nuevaPregunta, respuestaEsSi);
 
         // Generar resultado y mostrar estadísticas
-        ResultadoPartida r = App.arbol.generarResultado(false, true);
+        ResultadoPartida r = juegoService.generarResultado(false, true);
         try {
             App.mostrarEstadisticas(r);
         } catch (Exception e) {
@@ -150,7 +157,7 @@ public class JuegoController implements Initializable {
 
     @FXML
     private void onRetroceder() {
-        if (App.arbol.retroceder()) {
+        if (juegoService.retroceder()) {
             actualizarUI();
         }
     }
@@ -182,10 +189,5 @@ public class JuegoController implements Initializable {
         alert.setTitle("Error");
         alert.setContentText(msg);
         alert.showAndWait();
-    }
-
-    // Exponer puedoRetroceder para el FXML
-    public boolean puedoRetroceder() {
-        return App.arbol.puedoRetroceder();
     }
 }

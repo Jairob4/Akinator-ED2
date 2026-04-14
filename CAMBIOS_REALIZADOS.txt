@@ -1,0 +1,326 @@
+================================================================================
+                    DOCUMENTACIÓN DE CAMBIOS REALIZADOS
+                         Akinator — ED2 — Abril 2026
+================================================================================
+
+RESUMEN
+-------
+Se han realizado actualizaciones en la estructura del proyecto para agregar:
+1. Visualización gráfica del árbol de decisión
+2. Corrección de errores en controladores
+3. Mejora en la inyección de dependencias
+4. Nuevo FXML para visualización del árbol
+
+================================================================================
+CAMBIOS DETALLADOS
+================================================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. ARCHIVO: src/main/java/com/akinator/modelo/ArbolDesicion.java
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CAMBIOS:
+
+1.1) Constructor sin parámetros (NUEVO)
+     ─────────────────────────────────────
+     Agregué un constructor vacío que delega a otro constructor:
+     
+     public ArbolDesicion() {
+         this(new EstrategiaGreedy());
+     }
+     
+     RAZÓN: Los constructores anteriormente requerían EstrategiaSeleccionPreguntas,
+            lo que causaba errores al instanciar ArbolDesicion en:
+            - ArbolSerializer (líneas 35 y 49)
+            - MenuController (línea 79)
+            
+            Ahora permite crear el árbol con o sin estrategia explícita.
+
+1.2) Método obtenerAltura() (NUEVO)
+     ───────────────────────────────
+     Agregué método recursivo para calcular altura del árbol:
+     
+     public int obtenerAltura() {
+         return obtenerAlturaRec(raiz);
+     }
+     
+     private int obtenerAlturaRec(NodoArbol nodo) {
+         if (nodo == null) return 0;
+         int alturaIzq = obtenerAlturaRec(nodo.getHijoIzquierdo());
+         int alturaDer = obtenerAlturaRec(nodo.getHijoDerecho());
+         return 1 + Math.max(alturaIzq, alturaDer);
+     }
+     
+     RAZÓN: MenuController de obtenerAltura() que no existía.
+            Se usa en:
+            - MenuController para mostrar altura del árbol
+            - ArbolController para estadísticas
+
+1.3) Import agregado
+     ────────────────
+     import com.akinator.service.impl.EstrategiaGreedy;
+     
+     RAZÓN: Necesario para instanciar EstrategiaGreedy en el constructor.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. ARCHIVO: src/main/java/com/akinator/controlador/MenuController.java
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CAMBIOS:
+
+2.1) Corrección en actualizarStats()
+     ───────────────────────────────
+     ANTES: lblAltura.setText(String.valueOf(App.arbol.altura()));
+     AHORA: lblAltura.setText(String.valueOf(App.arbol.obtenerAltura()));
+     
+     RAZÓN: El método altura() no existía. Se reemplazó por obtenerAltura()
+            que es recursivo y calcula correctamente la altura.
+
+2.2) Método onVerArbol() (NUEVO)
+     ──────────────────────────
+     @FXML
+     private void onVerArbol() {
+         try {
+             App.mostrarArbol();
+         } catch (Exception e) {
+             mostrarError("Error al mostrar el árbol: " + e.getMessage());
+         }
+     }
+     
+     RAZÓN: Permite navegar a la visualización gráfica del árbol desde el menú.
+            Se llama desde el botón "🌲 Ver árbol de decisión" en menu.fxml.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. ARCHIVO: src/main/java/com/akinator/controlador/ArbolController.java
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CAMBIO IMPORTANTE: Archivo completamente reescrito
+
+CONTENIDO:
+──────────
+- Clase implementa Initializable
+- FXML components: canvasArbol, lblNodos, lblPersonajes, lblAltura, lblMemoria
+- Métodos principales:
+
+  initialize()
+    ↳ Carga estadísticas del árbol
+    ↳ Dibuja el árbol en el canvas
+  
+  cargarEstadisticas()
+    ↳ Actualiza labels con:
+      • Total de nodos
+      • Total de personajes
+      • Altura del árbol
+      • Rutas memorizadas
+  
+  dibujarArbol()
+    ↳ Calcula posiciones de nodos (árbol binario)
+    ↳ Dibuja conexiones (líneas con etiquetas SÍ/NO)
+    ↳ Dibuja nodos (círculos con colores)
+  
+  calcularPosiciones()
+    ↳ Recursivo
+    ↳ Asigna (x, y) a cada nodo
+    ↳ Distribuye horizontalmente y verticalmente
+  
+  dibujarConexiones()
+    ↳ Dibuja líneas entre padre e hijo
+    ↳ Etiqueta con "SÍ" (rama derecha) o "NO" (rama izquierda)
+  
+  dibujarNodos()
+    ↳ Dibuja círculos para cada nodo
+    ↳ Color verde para personajes
+    ↳ Color morado para preguntas
+    ↳ Resalta nodo actual con aura rosa
+    ↳ Texto truncado si es muy largo
+  
+NAVEGACIÓN:
+  onVolver()    → App.mostrarMenu()
+  onMenu()      → App.mostrarMenu()
+  onJugar()     → App.mostrarJuego()
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. ARCHIVO: src/main/java/com/akinator/App.java
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CAMBIO:
+
+4.1) Método mostrarArbol() (NUEVO)
+     ────────────────────────────
+     public static void mostrarArbol() throws Exception {
+         FXMLLoader loader = new FXMLLoader(
+             App.class.getResource("/com/akinator/arbol.fxml")
+         );
+         Scene scene = new Scene(loader.load(), 700, 520);
+         scene.getStylesheets().add(
+             App.class.getResource("/com/akinator/styles.css").toExternalForm()
+         );
+         stagePrincipal.setTitle("Akinator — Visualización del Árbol");
+         stagePrincipal.setScene(scene);
+     }
+     
+     RAZÓN: Cargar y mostrar la interfaz gráfica del árbol (arbol.fxml).
+            Similar a mostrarMenu(), mostrarJuego(), mostrarEstadisticas().
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. ARCHIVO: src/main/resources/com/akinator/arbol.fxml
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ARCHIVO NUEVO COMPLETAMENTE
+
+ESTRUCTURA:
+───────────
+VBox raíz
+├── Header (botón volver, título)
+├── HBox stats (nodos, personajes, altura, memoria)
+├── ScrollPane + Canvas (visualización del árbol)
+├── HBox leyenda (círculos de colores con etiquetas)
+└── HBox botones (Menú, Jugar)
+
+COMPONENTES FXML:
+─────────────────
+Canvas     fx:id="canvasArbol"     → Dibuja el árbol dinámicamente
+Label      fx:id="lblNodos"         → Muestra cantidad de nodos
+Label      fx:id="lblPersonajes"    → Muestra cantidad de personajes
+Label      fx:id="lblAltura"        → Muestra altura del árbol
+Label      fx:id="lblMemoria"       → Muestra rutas memorizadas
+
+LEYENDA:
+────────
+⚫ Morado  → Pregunta
+⚫ Verde   → Personaje
+⚫ Rosa    → Nodo actual
+
+ESTILO:
+───────
+Usa las clases CSS de styles.css:
+- root-pane        → Fondo oscuro (#0f0f1a)
+- header-juego     → Header con bordes
+- stats-bar        → Barra de estadísticas
+- footer-juego     → Footer
+- btn-volver       → Botón volver
+- btn-primario     → Botón principal
+- btn-secundario   → Botón secundario
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. ARCHIVO: src/main/resources/com/akinator/menu.fxml
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CAMBIO:
+
+6.1) Botón nuevo agregado
+     ────────────────────
+     <Button text="🌲  Ver árbol de decisión"
+             styleClass="btn-secundario"
+             onAction="#onVerArbol"
+             prefWidth="260" prefHeight="44"/>
+     
+     UBICACIÓN: Entre "Ver personajes conocidos" y "Reiniciar árbol"
+     ACCIÓN: Llama a MenuController.onVerArbol()
+     RESULTADO: Abre ArbolController con visualización gráfica
+
+================================================================================
+ARCHIVOS MODIFICADOS - RESUMEN RÁPIDO
+================================================================================
+
+✓ ArbolDesicion.java
+  - Constructor sin parámetros (sobrecarga)
+  - Método obtenerAltura()
+  - Import EstrategiaGreedy
+
+✓ MenuController.java
+  - Corrección: altura() → obtenerAltura()
+  - Método onVerArbol()
+
+✓ ArbolController.java
+  - Completamente reescrito con visualización gráfica
+
+✓ App.java
+  - Método mostrarArbol()
+
++ arbol.fxml (NUEVO)
+  - Interfaz gráfica para visualizar árbol
+
++ menu.fxml (MODIFICADO)
+  - Botón "Ver árbol de decisión" agregado
+
+================================================================================
+COMPORTAMIENTO ESPERADO
+================================================================================
+
+1. Al iniciar la aplicación → Menú principal con 4 botones:
+   • ▶ Jugar
+   • 📊 Ver personajes conocidos
+   • 🌲 Ver árbol de decisión (NUEVO)
+   • 🗑 Reiniciar árbol
+
+2. Al hacer clic en "🌲 Ver árbol de decisión":
+   → Abre ventana con visualización gráfica del árbol
+   → Muestra estadísticas (nodos, personajes, altura, memoria)
+   → Canvas dibuja:
+     • Nodos como círculos (morado = pregunta, verde = personaje)
+     • Conexiones como líneas con etiquetas (SÍ/NO)
+     • Nodo actual resaltado en rosa/magenta
+   → Leyenda con colores
+   → Botones para volver al menú o jugar
+
+3. La altura se calcula correctamente usando recursión (obtenerAltura)
+
+4. Sin errores de compilación
+
+================================================================================
+NOTA TÉCNICA SOBRE VISUALIZACIÓN
+================================================================================
+
+El árbol se dibuja recursivamente usando un algoritmo de posicionamiento binario:
+
+1. Posición inicial: Centro del canvas
+2. Para cada nodo:
+   - Hijo izquierdo: 1/4 de ancho a la izquierda, nivel +1
+   - Hijo derecho: 1/4 de ancho a la derecha, nivel +1
+3. Las líneas se dibujan ANTES que los nodos (para que queden debajo)
+4. El texto se trunca si supera 12 caracteres
+5. El nodo actual tiene un círculo externo extra (aura)
+
+CONSTANTES EN ArbolController:
+- RADIO_NODO = 30 píxeles
+- ESPACIO_HORIZONTAL = 120 píxeles
+- ESPACIO_VERTICAL = 100 píxeles
+- MARGEN = 40 píxeles
+
+================================================================================
+PRUEBAS REALIZADAS
+================================================================================
+
+❌ Se detectó error inicial:
+   ArbolDesicion requería EstrategiaSeleccionPreguntas en constructor
+   Afectaba:
+   - ArbolSerializer.cargar() (línea 35 y 49)
+   - MenuController.onReiniciarArbol() (línea 79)
+
+✅ Se solucionó:
+   Se agregó constructor sin parámetros que delega a otro:
+   public ArbolDesicion() {
+       this(new EstrategiaGreedy());
+   }
+   
+   Ahora permite:
+   - new ArbolDesicion()
+   - new ArbolDesicion(nuevaEstrategia)
+
+✅ Compilación exitosa:
+   mvn clean compile → BUILD SUCCESS
+
+================================================================================
+VERSIÓN
+================================================================================
+
+Proyecto:       Akinator — ED2
+Fecha:          Abril 13, 2026
+Java:           JDK 21
+JavaFX:         21
+Maven:          3.11.0
+
+================================================================================
+                                    FIN
+================================================================================

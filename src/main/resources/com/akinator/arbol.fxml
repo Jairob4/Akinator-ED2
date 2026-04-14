@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.akinator.controlador.ArbolController"
+      styleClass="root-pane"
+      alignment="TOP_CENTER"
+      spacing="0"
+      prefWidth="700" prefHeight="520">
+
+    <!-- HEADER -->
+    <VBox styleClass="header-juego" alignment="CENTER_LEFT" spacing="4">
+        <HBox alignment="CENTER_LEFT" spacing="16">
+            <Button fx:id="btnVolver"
+                    text="← Volver"
+                    styleClass="btn-volver"
+                    onAction="#onVolver"/>
+            <Label text="🌲 Visualización del Árbol de Decisión"
+                   styleClass="titulo-juego"/>
+        </HBox>
+    </VBox>
+
+    <!-- INFORMACIÓN DEL ÁRBOL -->
+    <HBox alignment="CENTER" spacing="30" styleClass="stats-bar">
+        <VBox alignment="CENTER" spacing="2">
+            <Label fx:id="lblNodos" text="7" styleClass="stat-numero"/>
+            <Label text="nodos" styleClass="stat-label"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="2">
+            <Label fx:id="lblPersonajes" text="4" styleClass="stat-numero"/>
+            <Label text="personajes" styleClass="stat-label"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="2">
+            <Label fx:id="lblAltura" text="2" styleClass="stat-numero"/>
+            <Label text="altura" styleClass="stat-label"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="2">
+            <Label fx:id="lblMemoria" text="0" styleClass="stat-numero"/>
+            <Label text="rutas memo" styleClass="stat-label"/>
+        </VBox>
+    </HBox>
+
+    <!-- CANVAS PARA DIBUJAR EL ÁRBOL -->
+    <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS">
+        <Canvas fx:id="canvasArbol"
+                width="660"
+                height="350"/>
+    </ScrollPane>
+
+    <!-- LEYENDA -->
+    <HBox alignment="CENTER" spacing="20" styleClass="footer-juego">
+        <VBox alignment="CENTER_LEFT" spacing="2">
+            <Circle radius="5" fill="#7c3aed"/>
+            <Label text="Pregunta" styleClass="metrica-label"/>
+        </VBox>
+        <VBox alignment="CENTER_LEFT" spacing="2">
+            <Circle radius="5" fill="#55ff77"/>
+            <Label text="Personaje" styleClass="metrica-label"/>
+        </VBox>
+        <VBox alignment="CENTER_LEFT" spacing="2">
+            <Circle radius="5" fill="#e0b0ff"/>
+            <Label text="Nodo actual" styleClass="metrica-label"/>
+        </VBox>
+    </HBox>
+
+    <!-- BOTONES DE ACCIÓN -->
+    <HBox alignment="CENTER" spacing="20" styleClass="footer-stats">
+        <Button text="🏠  Menú"
+                styleClass="btn-primario"
+                onAction="#onMenu"
+                prefWidth="180" prefHeight="44"/>
+        <Button text="▶  Jugar"
+                styleClass="btn-secundario"
+                onAction="#onJugar"
+                prefWidth="180" prefHeight="44"/>
+    </HBox>
+
+</VBox>

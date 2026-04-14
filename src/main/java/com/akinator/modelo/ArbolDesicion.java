@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.*;
 
 import com.akinator.ResultadoPartida;
+import com.akinator.service.EstrategiaSeleccionPreguntas;
+import com.akinator.service.impl.EstrategiaGreedy;
 /**
  * Árbol binario de decisión del Akinator.
  *
@@ -37,7 +39,13 @@ public class ArbolDesicion implements Serializable{
     private int profundidadActual = 0;
     private long tiempoInicio; // Para medir el tiempo de la partida
 
-    public ArbolDesicion(){
+    private String personajePartidaActual = ""; // Para almacenar el personaje que se está adivinando en la partida actual
+
+    //inyectar estrategia de selección de preguntas (greedy)
+    private transient EstrategiaSeleccionPreguntas estrategia;
+
+
+    public ArbolDesicion() {
         pilaEstados = new ArrayDeque<>();
         pilaRespuestas = new ArrayDeque<>();
         memoria = new HashMap<>();
@@ -61,8 +69,8 @@ public class ArbolDesicion implements Serializable{
         cientifico.setHijoIzquierdo(napoleon); // respuesta "no" lleva a Napoleon
 
         NodoArbol poderes = new NodoArbol("¿Tiene poderes sobrenaturales?");
-        poderes.setHijoDerecho(batman); // respuesta "sí" lleva a Batman
-        poderes.setHijoIzquierdo(goku); // respuesta "no" lleva a Goku
+        poderes.setHijoDerecho(goku); // respuesta "sí" lleva a Goku
+        poderes.setHijoIzquierdo(batman); // respuesta "no" lleva a Batman
 
         // Nivel 0 (raíz)
         raiz.setHijoDerecho(cientifico); // respuesta "sí" lleva a científico
@@ -76,6 +84,7 @@ public class ArbolDesicion implements Serializable{
         nodoActual = raiz;
         preguntasRealizadas = 0;
         profundidadActual = 0;
+        personajePartidaActual = "";
         tiempoInicio = System.nanoTime();
         pilaEstados.clear();
         pilaRespuestas.clear();
@@ -100,17 +109,18 @@ public class ArbolDesicion implements Serializable{
     */
 
     public void responder(boolean esSi){
-        if (nodoActual == null) return; // No hay nodo actual, no se puede responder
+        if (nodoActual == null || nodoActual.isEsPersonaje()) return; // No hay nodo actual, no se puede responder
 
         // ingresar estado actual en la solucion parcial (backtracking)
         pilaEstados.push(nodoActual);
         pilaRespuestas.push(esSi);
 
-        // Avanzar según la respuesta
-        if (esSi) {
-            nodoActual = nodoActual.getHijoDerecho();
+        // Avanzar según la estrategia de selección de preguntas
+        if(estrategia != null) {
+            nodoActual = estrategia.seleccionarSiguiente(nodoActual, esSi);
         } else {
-            nodoActual = nodoActual.getHijoIzquierdo();
+            // Si no hay estrategia, avanzar de forma predeterminada (hijo derecho para "sí", hijo izquierdo para "no")
+            nodoActual = esSi ? nodoActual.getHijoDerecho() : nodoActual.getHijoIzquierdo();
         }
 
         preguntasRealizadas++;
@@ -123,7 +133,7 @@ public class ArbolDesicion implements Serializable{
         O(1) para retroceder
     */
     public boolean retroceder(){
-        if (pilaEstados.isEmpty() && !puedoRetroceder()) return false; // No hay estados para retroceder
+        if (!puedoRetroceder()) return false; // No hay estados para retroceder
 
         nodoActual = pilaEstados.pop(); // Recuperar el último nodo visitado
         pilaRespuestas.pop(); // Eliminar la respuesta correspondiente
@@ -158,6 +168,13 @@ public class ArbolDesicion implements Serializable{
         NodoArbol personajeViejo = nodoActual; // Nodo del personaje que el Akinator no pudo adivinar
         String nombrePersonajeViejo = personajeViejo.getContenido();
 
+        personajePartidaActual = nuevoPersonaje; // Guardar el personaje que se está aprendiendo en la partida actual
+
+        if(nuevoPersonaje.equalsIgnoreCase(nombrePersonajeViejo) || existePersonaje(nuevoPersonaje)) {
+            // Si el nuevo personaje es el mismo que el viejo, no hay nada que aprender
+            return;
+        }
+
         // convertir el nodo en una nueva pregunta, para expandir el arbol
         personajeViejo.setContenido(nuevaPregunta);
         personajeViejo.setEsPersonaje(false); 
@@ -173,8 +190,12 @@ public class ArbolDesicion implements Serializable{
             personajeViejo.setHijoDerecho(nodoViejo); // Respuesta "sí" lleva al personaje viejo
         }
 
+        nodoActual = personajeViejo; // Actualizar el nodo actual al nuevo nodo de pregunta
+
         // eliminar la ruta memorizada del personaje viejo, ya que ahora ese nodo es una pregunta
         memoria.remove(nombrePersonajeViejo);
+
+        List<Boolean> rutaBase = reconstruirRutaDesdePila(); // Reconstruir la ruta base desde la raíz hasta el nodo actual
 
         // almacenar la nueva ruta para el nuevo personaje y hasta el nuevo nodo del personaje viejo con programacion dinamica
         // reconstruimos la ruta a traves de la solucion parcial guardada en la pila
@@ -192,6 +213,31 @@ public class ArbolDesicion implements Serializable{
         memoria.put(nuevoPersonaje, rutaNuevoPersonaje); // Guardar la ruta del nuevo personaje
 
     }
+
+    public boolean existePersonaje(String personaje) {
+        return memoria.containsKey(personaje) || buscarPersonajeRec(raiz, personaje);
+    }
+
+    private boolean buscarPersonajeRec(NodoArbol nodo, String personaje) {
+        if (nodo == null) return false;
+        if (nodo.isEsPersonaje() && nodo.getContenido().equalsIgnoreCase(personaje)) {
+            return true; // Personaje encontrado
+        }
+        // Buscar en ambos subárboles
+        return buscarPersonajeRec(nodo.getHijoDerecho(), personaje) ||
+               buscarPersonajeRec(nodo.getHijoIzquierdo(), personaje);
+    }
+
+    private List<Boolean> reconstruirRutaDesdePila() {
+        List<Boolean> ruta = new ArrayList<>(pilaRespuestas);
+        Collections.reverse(ruta); // Invertir para obtener la ruta desde la raíz
+        return ruta;
+    }
+
+     /* Estrategia Greedy:
+        calcula qué tan buena es una pregunta para dividir el árbol, y elige la mejor pregunta según esa métrica
+        O(n) para evaluar todas las preguntas disponibles en el nodo actual, donde n es el número de preguntas hijas del nodo actual
+     */
 
     /**
         GREEDY: calcula qué tan buena es una pregunta para dividir el árbol. 
@@ -275,15 +321,6 @@ public class ArbolDesicion implements Serializable{
     }
 
     //metodos recursivos O(n)
-    public int altura() {
-        return alturaRec(raiz);
-    }
-
-    private int alturaRec(NodoArbol nodo) {
-        if (nodo == null) return -1; // Altura de un nodo nulo es -1
-        if (nodo.isEsPersonaje()) return 0; // Altura de un nodo hoja (personaje) es 0
-        return 1 + Math.max(alturaRec(nodo.getHijoDerecho()), alturaRec(nodo.getHijoIzquierdo()));
-    }
 
     public int contarNodos() {
         return contarNodosRec(raiz);
@@ -305,6 +342,17 @@ public class ArbolDesicion implements Serializable{
              + contarPersonajesRec(nodo.getHijoIzquierdo());
     }
 
+    public int obtenerAltura() {
+        return obtenerAlturaRec(raiz);
+    }
+
+    private int obtenerAlturaRec(NodoArbol nodo) {
+        if (nodo == null) return 0;
+        int alturaIzq = obtenerAlturaRec(nodo.getHijoIzquierdo());
+        int alturaDer = obtenerAlturaRec(nodo.getHijoDerecho());
+        return 1 + Math.max(alturaIzq, alturaDer);
+    }
+
     // ahora vienen las metricas de la partida, complejidad practica y analisis de rendimiento
     public long getTiempoPartida() {
         return System.nanoTime() - tiempoInicio; // Tiempo transcurrido en nanosegundos
@@ -322,6 +370,17 @@ public class ArbolDesicion implements Serializable{
         if(ratio < 1.5) return "O(log n) - Excelente rendimiento, el árbol está bien balanceado.";
         else if(ratio < 3) return "O(n) - Rendimiento aceptable, el árbol tiene algunas ramas más largas.";
         else return "O(n) - Rendimiento pobre, el árbol está muy desbalanceado.";
+    }
+
+    private void readObject(java.io.ObjectInputStream in) 
+        throws java.io.IOException, ClassNotFoundException {
+
+        in.defaultReadObject(); // reconstruye los atributos serializados
+
+        // Reinyectar estrategia (porque es transient)
+        if (this.estrategia == null) {
+            this.estrategia = new EstrategiaGreedy();
+        }
     }
 
     // metricas generales de la partida
@@ -345,15 +404,23 @@ public class ArbolDesicion implements Serializable{
         return memoria.size();
     }
 
+    public void setEstrategia(EstrategiaSeleccionPreguntas estrategia) {
+        this.estrategia = estrategia;
+    }
+
     public ResultadoPartida generarResultado(boolean gano, boolean aprendio) {
         ResultadoPartida r = new ResultadoPartida();
 
         //  Resultado del juego 
         r.setGanoAkinator(gano);
         r.setAprendioNuevo(aprendio);
-        r.setPersonaje(
-            nodoActual != null ? nodoActual.getContenido() : "Desconocido"
-        );
+        if (gano && nodoActual != null && nodoActual.isEsPersonaje()) {
+            r.setPersonaje(nodoActual.getContenido());
+        } else if (aprendio && !personajePartidaActual.isEmpty()) {
+            r.setPersonaje(personajePartidaActual);
+        } else {
+            r.setPersonaje("Desconocido");
+        }
 
         // Métricas de recorrido 
         r.setPreguntasHechas(preguntasRealizadas);

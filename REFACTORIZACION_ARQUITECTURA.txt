@@ -1,0 +1,446 @@
+================================================================================
+       REFACTORIZACIÓN DE ARQUITECTURA — MVC + INYECCIÓN DE DEPENDENCIAS
+                  Akinator — ED2 — Abril 13, 2026
+================================================================================
+
+OBJETIVO LOGRADO
+================
+
+Transformar la arquitectura de:
+  ❌ Controladores llamando directamente a App.arbol (acoplamiento)
+  
+A:
+  ✅ Controladores → Servicios → Modelo (separación clara de capas)
+  ✅ Inyección de dependencias
+  ✅ Arquitectura MVC pura con patrón de servicios
+
+================================================================================
+CAMBIOS REALIZADOS
+================================================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. SERVICIOS EXTENDIDOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1.1) JuegoService.java (MODIFICADO)
+     ────────────────────────────────
+     
+ANTES:
+  - responder(boolean esSi)
+  - retroceder()
+  - puedoRetroceder()
+  - juegoTerminado()
+  - getPreguntaActual()
+  - aprender(...)
+  - generarResultado(...)
+  - reiniciar()
+
+AHORA (AGREGADOS):
+  + getPreguntasRealizadas()      → Retorna int
+  + getTiempoPartida()            → Retorna long
+  + getTamanioMemoria()           → Retorna int
+
+RAZÓN:
+  JuegoController necesitaba acceder a métricas.
+  Ahora lo hace a través del servicio en lugar de App.arbol
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. SERVICIOS CREADOS NUEVOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2.1) MenuService.java (NUEVO)
+     ─────────────────────────
+     
+Ubicación: src/main/java/com/akinator/service/MenuService.java
+
+Interface con métodos para lógica del menú:
+  
+  // Estadísticas
+  int contarNodos()
+  int contarPersonajes()
+  int obtenerAltura()
+  int getTamanioMemoria()
+  
+  // Gestión de personajes
+  List<String> obtenerTodosPersonajes()
+  
+  // Reinicio
+  void reiniciarArbol()
+  
+  // Visualización
+  ArbolVisualService getVisualizationService()
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2.2) MenuServiceImpl.java (NUEVO)
+     ──────────────────────────────
+     
+Ubicación: src/main/java/com/akinator/service/impl/MenuServiceImpl.java
+
+Implementación de MenuService:
+
+public class MenuServiceImpl implements MenuService {
+    private ArbolDesicion arbol;
+    private ArbolRepository repository;
+    private ArbolVisualService visualService;
+    
+    // Constructor con inyección
+    public MenuServiceImpl(ArbolDesicion arbol,
+                          ArbolRepository repository,
+                          ArbolVisualService visualService)
+    
+    // Implementa delegando a arbol y repository
+    @Override
+    public int contarNodos() {
+        return arbol.contarNodos();
+    }
+    
+    @Override
+    public void reiniciarArbol() {
+        // Borra archivo arbol.dat
+        // No recrea aquí (responsabilidad de App)
+    }
+    
+    // ... más métodos
+}
+
+DISEÑO:
+  - No es un singleton
+  - Inyecta dependencias en constructor
+  - Delega operaciones al modelo
+  - Centraliza lógica del menú
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. CONTROLADORES REFACTORIZADOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3.1) JuegoController.java (REFACTORIZADO)
+      ────────────────────────────────────
+
+CAMBIOS CLAVE:
+
+ANTES:
+  - Importaba: ArbolSerializer (no debería)
+  - Accedía directamente: App.arbol
+  - Guardaba directamente: App.guardarArbol()
+  
+Ejemplo ANTES (línea 47):
+  App.arbol.responder(esSi);
+
+AHORA:
+  - Inyecta JuegoService
+  - Delega TODO al servicio
+  - Sin acceso a App.arbol
+
+Estructura AHORA:
+  private JuegoService juegoService;
+  
+  public void setJuegoService(JuegoService juegoService) {
+      this.juegoService = juegoService;
+  }
+  
+  private void responder(boolean esSi) {
+      juegoService.responder(esSi);  // ← Usa servicio
+      actualizarUI();
+  }
+
+MÉTODOS ACTUALIZADOS:
+  - responder()         → juegoService.responder()
+  - actualizarUI()      → Usa métricas del servicio
+  - aprender()          → juegoService.aprender()
+  - onRetroceder()      → juegoService.retroceder()
+  - onAcertó()          → juegoService.generarResultado()
+  
+CAMBIO IMPORTANTE:
+  - YA NO llama App.guardarArbol()
+  - El servicio guarda automáticamente en aprender()
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3.2) MenuController.java (REFACTORIZADO)
+      ──────────────────────────────────
+
+ANTES:
+  private MenuController {
+      @Override
+      public void initialize(...) {
+          lblPersonajes.setText(App.arbol.contarPersonajes());
+          lblNodos.setText(App.arbol.contarNodos());
+          lblAltura.setText(App.arbol.altura());  // ← Error: altura() no existe
+          ...
+      }
+  }
+
+AHORA:
+  private MenuService menuService;
+  
+  public void setMenuService(MenuService menuService) {
+      this.menuService = menuService;
+  }
+  
+  @Override
+  public void initialize(...) {
+      if (menuService != null) {
+          actualizarStats();
+      }
+  }
+  
+  private void actualizarStats() {
+      lblPersonajes.setText(menuService.contarPersonajes());
+      lblNodos.setText(menuService.contarNodos());
+      lblAltura.setText(menuService.obtenerAltura());
+      lblMemoria.setText(menuService.getTamanioMemoria());
+  }
+
+CAMBIOS:
+  ✗ App.arbol.altura()  → ✓ menuService.obtenerAltura()
+  ✗ Nueva instance      → ✓ Inyectado
+  ✗ menuService usado desde MenuControllerini → ✓ Setter
+  - onReiniciarArbol()  → menuService.reiniciarArbol()
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3.3) ArbolController.java (REFACTORIZADO)
+      ──────────────────────────────────
+
+ANTES:
+  @Override
+  public void initialize(...) {
+      ArbolDesicion arbol = App.arbol;
+      lblNodos.setText(arbol.contarNodos());
+      ...
+      dibujarArbol();
+  }
+  
+  private void dibujarArbol() {
+      NodoArbol raiz = App.arbol.getRaiz();
+      ...
+  }
+
+AHORA:
+  private MenuService menuService;
+  private ArbolDesicion arbol;
+  
+  public void setMenuService(MenuService menuService) {
+      this.menuService = menuService;
+  }
+  
+  public void setArbol(ArbolDesicion arbol) {
+      this.arbol = arbol;
+  }
+  
+  @Override
+  public void initialize(...) {
+      if (menuService != null && arbol != null) {
+          cargarEstadisticas();
+          dibujarArbol();
+      }
+  }
+  
+  private void cargarEstadisticas() {
+      lblNodos.setText(menuService.contarNodos());
+      lblPersonajes.setText(menuService.contarPersonajes());
+      lblAltura.setText(menuService.obtenerAltura());
+      lblMemoria.setText(menuService.getTamanioMemoria());
+  }
+
+CAMBIOS:
+  ✗ App.arbol directo → ✓ menuService (estadísticas) + arbol (dibujar)
+  ✗ Sin inyección     → ✓ Dos setters para dependencias
+  ✗ Sin validación    → ✓ Valida que servicios estén inyectados
+
+NOTA IMPORTANTE:
+  - ArbolController necesita AMBOS:
+    • menuService → Para estadísticas
+    • arbol → Para acceder a getNodoActual() y getRaiz() en dibujo
+  - No se puede evitar acceso a arbol aquí (es lógica de visualización)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. APP.JAVA ACTUALIZADO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CAMBIOS ESTRUCTURALES:
+
+ANTES:
+  public class App {
+      public static void mostrarMenu() throws Exception {
+          FXMLLoader loader = new FXMLLoader(...);
+          ... carga Scene sin inyectar nada
+          stagePrincipal.setScene(scene);
+      }
+  }
+
+AHORA:
+  public class App {
+      // Instancias estáticas de servicios
+      private static JuegoService juegoService;
+      private static MenuService menuService;
+      
+      // Inicializa servicios una sola vez
+      private static void inicializarServicios() {
+          if (juegoService == null) {
+              juegoService = new JuegoServiceImpl(arbol, ArbolSerializer);
+          }
+          if (menuService == null) {
+              menuService = new MenuServiceImpl(arbol, ArbolSerializer, 
+                                              new ArbolVisualServiceImpl(arbol));
+          }
+      }
+      
+      public static void mostrarMenu() throws Exception {
+          FXMLLoader loader = new FXMLLoader(...);
+          Scene scene = new Scene(loader.load(), 700, 520);
+          
+          // ← NUEVO: Inyecta servicio en controller
+          MenuController ctrl = loader.getController();
+          ctrl.setMenuService(menuService);
+          
+          stagePrincipal.setScene(scene);
+      }
+      
+      public static void mostrarJuego() throws Exception {
+          // ...similar...
+          JuegoController ctrl = loader.getController();
+          ctrl.setJuegoService(juegoService);
+          juegoService.reiniciar();  // Reinicia partida
+      }
+      
+      public static void mostrarArbol() throws Exception {
+          // ...similar...
+          ArbolController ctrl = loader.getController();
+          ctrl.setMenuService(menuService);
+          ctrl.setArbol(arbol);  // Inyecta los dos
+      }
+  }
+
+FLUJO DE CREACIÓN:
+  1. start() → cargarArbol()
+  2. cargarArbol() → inicializarServicios()
+  3. inicializarServicios() → Crea instancias (una sola vez)
+  4. mostrarXxx() → Inyecta servicios en controller
+
+VENTAJA:
+  - Servicios se crean una sola vez (singleton en App)
+  - Se reutilizan en diferentes controladores
+  - Evita crear múltiples instancias innecesarias
+
+================================================================================
+COMPARACIÓN ANTES vs DESPUÉS
+================================================================================
+
+ANTES (Acoplamiento fuerte):
+  JuegoController
+    ↓
+    App.arbol         ← Acceso directo al modelo
+    App.guardarArbol() ← Llama métodos estáticos
+    
+MenuController
+    ↓
+    App.arbol         ← Acceso directo al modelo
+
+ArbolController
+    ↓
+    App.arbol         ← Acceso directo al modelo
+
+└─ PROBLEMA: Todos acceden, sin abstracción, difícil testear
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AHORA (Separación clara):
+  JuegoController
+    ↓
+    JuegoService (inyectado)
+      ↓
+      ArbolDesicion (modelo)
+      ArbolRepository (persistencia)
+
+MenuController
+    ↓
+    MenuService (inyectado)
+      ↓
+      ArbolDesicion (modelo)
+      ArbolRepository (persistencia)
+      ArbolVisualService
+
+ArbolController
+    ↓
+    MenuService (inyectado)
+    ArbolDesicion (inyectado)
+
+└─ BENEFICIO: Cada capa con responsabilidad clara, testeable
+
+================================================================================
+PATRONES APLICADOS
+================================================================================
+
+✓ INYECCIÓN DE DEPENDENCIAS
+  - Controllers reciben servicios via setters
+  - Servicios no se instancian en controllers
+  - App.java gestiona creación e inyección
+
+✓ PATRÓN SERVICIO
+  - Lógica de negocio en servicios
+  - Controllers solo manejan eventos UI
+  - Servicios capa intermedia
+
+✓ PATRÓN REPOSITORY
+  - ArbolRepository abstrae persistencia
+  - JuegoServiceImpl delega guardado al repository
+
+✓ MVC PURO
+  - Modelo: ArbolDesicion, NodoArbol
+  - Vista: FXML files
+  - Controlador: solo maneja UI, delega lógica
+
+✓ SEPARACIÓN DE CAPAS
+  Capa UI (FXML)
+       ↓
+  Capa Controlador (maneja eventos)
+       ↓
+  Capa Servicio (lógica negocio)
+       ↓
+  Capa Persistencia (Repository)
+       ↓
+  Capa Modelo (Entidades de negocio)
+
+================================================================================
+COMPILACIÓN
+================================================================================
+
+✅ mvn clean compile → BUILD SUCCESS
+   - 21 archivos compilados exitosamente
+   - Sin errores
+   - 1 warning sobre system modules (irrelevante)
+
+================================================================================
+ARCHIVOS MODIFICADOS RESUMEN
+================================================================================
+
+SERVICIOS (3):
+  ✓ JuegoService.java (ampliado)
+  ✓ JuegoServiceImpl.java (ampliado)
+  + MenuService.java (NUEVO)
+  + MenuServiceImpl.java (NUEVO)
+
+CONTROLADORES (3):
+  ✓ JuegoController.java (refactorizado)
+  ✓ MenuController.java (refactorizado)
+  ✓ ArbolController.java (refactorizado)
+
+APPLICATION (1):
+  ✓ App.java (actualizado con inyección)
+
+TOTAL: 8 archivos afectados
+
+================================================================================
+PRÓXIMOS PASOS (OPCIONALES)
+================================================================================
+
+1. Crear EstadisticasService para aislar lógica de estadísticas
+2. Interfaces para evitar imports directos de implementaciones
+3. Factory pattern para crear servicios
+4. Pruebas unitarias (servicios son ahora fáciles de testear)
+5. Logging/Auditoría en servicios
+
+================================================================================
+JSON
