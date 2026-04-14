@@ -33,18 +33,14 @@ public class JuegoController implements Initializable {
     // ── INYECCIÓN DE DEPENDENCIAS ─────────────────────────────────────────
     public void setJuegoService(JuegoService juegoService) {
         this.juegoService = juegoService;
+        // Actualizar UI después de inyectar el servicio
+        actualizarUI();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        if (juegoService != null) {
-            actualizarUI();
-        }
+        // No hacer nada aquí - esperar a que se inyecte el servicio
     }
-
-    // ─────────────────────────────────────────────────────────────────────
-    // FLUJO PRINCIPAL DEL JUEGO
-    // ─────────────────────────────────────────────────────────────────────
 
     @FXML
     private void onSi() { responder(true); }

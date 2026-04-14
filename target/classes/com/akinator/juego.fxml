@@ -25,7 +25,7 @@
         <!-- Burbuja de pregunta -->
         <VBox styleClass="burbuja-pregunta" alignment="CENTER">
             <Label fx:id="lblPregunta"
-                   text="Piensa en un personaje..."
+                   text=""
                    styleClass="texto-pregunta"
                    wrapText="true"
                    maxWidth="500"
