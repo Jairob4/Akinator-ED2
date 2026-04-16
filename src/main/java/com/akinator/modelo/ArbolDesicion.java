@@ -90,6 +90,14 @@ public class ArbolDesicion implements Serializable{
         pilaRespuestas.clear();
     }
 
+    public void reiniciarArbol(){
+        memoria.clear();
+        pilaEstados.clear();
+        pilaRespuestas.clear();
+        construirArbolInicial();
+        reiniciarPartida();
+    }
+
     public String getPreguntaActual(){
         return nodoActual != null ? nodoActual.getContenido() : "";
     }

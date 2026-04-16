@@ -8,11 +8,13 @@ import com.akinator.service.MenuService;
 import com.akinator.service.impl.JuegoServiceImpl;
 import com.akinator.service.impl.MenuServiceImpl;
 import com.akinator.service.impl.ArbolVisualServiceImpl;
+import com.akinator.service.impl.ArbolCapaServiceImpl;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 
 public class App extends Application {
 
@@ -111,7 +113,9 @@ public class App extends Application {
         // Inyectar servicios
         ArbolController ctrl = loader.getController();
         ctrl.setMenuService(menuService);
+        System.out.println();
         ctrl.setArbol(arbol);
+
 
         stagePrincipal.setTitle("Akinator — Visualización del Árbol");
         stagePrincipal.setScene(scene);

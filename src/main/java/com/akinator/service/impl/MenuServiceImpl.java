@@ -7,12 +7,14 @@ import com.akinator.modelo.ArbolDesicion;
 import com.akinator.repository.ArbolRepository;
 import com.akinator.service.ArbolVisualService;
 import com.akinator.service.MenuService;
+import com.akinator.service.ArbolCapaService;
 
 public class MenuServiceImpl implements MenuService {
 
     private final ArbolDesicion arbol;
     private final ArbolRepository repository;
     private final ArbolVisualService visualService;
+    private final ArbolCapaService arbolCapaService;
 
     public MenuServiceImpl(ArbolDesicion arbol,
                           ArbolRepository repository,
@@ -20,6 +22,7 @@ public class MenuServiceImpl implements MenuService {
         this.arbol = arbol;
         this.repository = repository;
         this.visualService = visualService;
+        this.arbolCapaService = new ArbolCapaServiceImpl();
     }
 
     @Override
@@ -49,7 +52,6 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public void reiniciarArbol() {
-        // Borrar archivo persistido
         String rutaArchivo = System.getProperty("user.home")
                 + File.separator + "arbol.dat";
         File f = new File(rutaArchivo);
@@ -57,11 +59,16 @@ public class MenuServiceImpl implements MenuService {
             f.delete();
         }
         
-        // No recrear aquí, dejamos que App lo haga. Solo notificamos limpieza.
+        arbol.reiniciarArbol();
     }
 
     @Override
     public ArbolVisualService getVisualizationService() {
         return visualService;
+    }
+
+    @Override
+    public ArbolCapaService getArbolCapaService() {
+        return arbolCapaService;
     }
 }

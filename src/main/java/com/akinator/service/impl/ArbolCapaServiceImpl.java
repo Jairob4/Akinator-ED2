@@ -2,6 +2,7 @@ package com.akinator.service.impl;
 
 import java.util.*;
 
+import com.akinator.modelo.ArbolDesicion;
 import com.akinator.modelo.dto.NodoVistaDTO;
 import com.akinator.service.ArbolCapaService;
 
@@ -9,6 +10,7 @@ public class ArbolCapaServiceImpl implements ArbolCapaService {
 
     private static final double ESPACIO_HORIZONTAL = 120;
     private static final double ESPACIO_VERTICAL = 100;
+
 
     @Override
     public Map<Integer, double[]> calcularPosiciones(List<NodoVistaDTO> nodos) {
@@ -21,14 +23,14 @@ public class ArbolCapaServiceImpl implements ArbolCapaService {
             mapaNodos.put(nodo.getId(), nodo);
         }
 
-        // 2️⃣ Calcular nivel dinámicamente
+        //  Calcular nivel dinámicamente
         Map<Integer, Integer> niveles = new HashMap<>();
 
         for (NodoVistaDTO nodo : nodos) {
             calcularNivel(nodo, mapaNodos, niveles);
         }
 
-        // 3️⃣ Agrupar por nivel
+        //  Agrupar por nivel
         Map<Integer, List<NodoVistaDTO>> porNivel = new TreeMap<>();
 
         for (NodoVistaDTO nodo : nodos) {
@@ -38,7 +40,7 @@ public class ArbolCapaServiceImpl implements ArbolCapaService {
                 .add(nodo);
         }
 
-        // 4️⃣ Asignar posiciones
+        //  Asignar posiciones
         for (Map.Entry<Integer, List<NodoVistaDTO>> entry : porNivel.entrySet()) {
 
             int nivel = entry.getKey();

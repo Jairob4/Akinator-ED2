@@ -14,7 +14,7 @@ public class ResultadoPartida {
     private int     tamanioMemo;
 
 
-    // ── Getters y Setters ─────────────────────────────────────────────────
+    // Getters y Setters 
     public boolean isGanoAkinator()              { return ganoAkinator; }
     public void    setGanoAkinator(boolean g)    { this.ganoAkinator = g; }
     public String  getPersonaje()                { return personaje; }
@@ -39,7 +39,7 @@ public class ResultadoPartida {
 
     
 
-    // ── Conversiones ──────────────────────────────────────────────────────
+    // Conversiones
     public double getTiempoMs() {
         return tiempoNanos / 1000000.0;
     }
@@ -48,7 +48,7 @@ public class ResultadoPartida {
         return memoriaBytes / 1024.0;
     }
 
-    // ── Análisis de complejidad ───────────────────────────────────────────
+    //Análisis de complejidad 
     public String getComplejidad() {
         if (totalPersonajes <= 1) return "O(1)";
         double logN  = Math.log(totalPersonajes) / Math.log(2);

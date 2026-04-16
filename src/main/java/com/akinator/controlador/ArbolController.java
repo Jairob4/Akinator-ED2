@@ -39,18 +39,24 @@ public class ArbolController implements Initializable {
     // ── INYECCIÓN DE DEPENDENCIAS ─────────────────────────────────────────
     public void setMenuService(MenuService menuService) {
         this.menuService = menuService;
+        if(this.arbol != null){
+            cargarEstadisticas();
+            dibujarArbol();
+        }
     }
 
     public void setArbol(ArbolDesicion arbol) {
         this.arbol = arbol;
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        if (menuService != null && arbol != null) {
+        if(this.menuService != null){
             cargarEstadisticas();
             dibujarArbol();
         }
+    }
+    
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        
     }
 
     private void cargarEstadisticas() {
