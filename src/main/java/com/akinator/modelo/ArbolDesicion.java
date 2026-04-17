@@ -159,17 +159,9 @@ public class ArbolDesicion implements Serializable{
         memoiza la ruta (secuencia de preguntas) para cada personaje adivinado, para acelerar futuras partidas
         O(1) para recuperar la ruta memorizada, O(n) para almacenar una nueva ruta
 
-        cuando nuestro akinator falla, va a aprender un personaje nuevo, entonces va a guardar la ruta (secuencia de preguntas) que llevó a ese personaje, para que si en el futuro alguien juega y piensa en ese mismo personaje, el akinator pueda recuperar esa ruta memorizada y adivinarlo más rápido
-        O(1) en futuras partidas y O(n) para almacenar la nueva ruta, donde n es la profundidad del nodo del personaje nuevo
-
-        ANTES:       [PersonajeViejo]  ← rama completa
-     
-        DESPUÉS:     [NuevaPregunta]
-                    /               \
-        [PersonajeViejo]    [PersonajeNuevo]
-               NO                   SI
-
-        por lo que nuestro modelo actualizará el arbol de desicion de la manera vista
+        cuando nuestro akinator falla, va a aprender un personaje nuevo, entonces va a guardar la ruta (secuencia de preguntas) que llevó a ese personaje,
+        para que si en el futuro alguien juega y piensa en ese mismo personaje, el akinator pueda recuperar esa ruta memorizada y adivinarlo más rápido en O(1) 
+        O(n) para almacenar la nueva ruta, donde n es la profundidad del nodo del personaje nuevo
     */
 
     public void aprenderPersonaje(String nuevoPersonaje, String nuevaPregunta, boolean respuestaEsSi){
@@ -289,15 +281,16 @@ public class ArbolDesicion implements Serializable{
     }
 
     /*   programacion dinamica:
-          busca en la memoria si el personaje ya tiene una ruta.
-          si la tiene la retorna en 0(1) por lo que la complejidad computacional baja significativamente
+        busca en la memoria si el personaje ya tiene una ruta.
+        si la tiene la retorna en 0(1) por lo que la complejidad computacional baja significativamente
     */
 
     public void memorizarAcierto(String personaje){
         if(nodoActual == null || !nodoActual.isEsPersonaje()) return; // No hay personaje actual para memorizar
-        String nombrePersonaje = nodoActual.getContenido();
-        if(!memoria.containsKey(nombrePersonaje))
-            memoria.put(nombrePersonaje, reconstruirRutaDesdePila()); // Guardar la ruta actual para el personaje adivinado
+        if(nodoActual.getContenido().equalsIgnoreCase(personaje) && !memoria.containsKey(personaje)) {
+            List<Boolean> ruta = reconstruirRutaDesdePila(); // Reconstruir la ruta desde la pila
+            memoria.put(personaje, ruta); // Guardar la ruta memorizada para el personaje
+        }
     }
 
     public List<Boolean> obtenerRutaPersonaje(String personaje) {
