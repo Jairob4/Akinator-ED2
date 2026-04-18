@@ -2,7 +2,7 @@ package com.akinator.controlador;
 
 import com.akinator.App;
 import com.akinator.service.MenuService;
-import com.akinator.modelo.ArbolDesicion;
+import com.akinator.modelo.ArbolDecision;
 import com.akinator.modelo.dto.NodoVistaDTO;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,7 +20,7 @@ import java.util.*;
 public class ArbolController implements Initializable {
 
     private MenuService menuService;
-    private ArbolDesicion arbol;
+    private ArbolDecision arbol;
 
     @FXML private Canvas canvasArbol;
     @FXML private Label lblNodos;
@@ -44,7 +44,7 @@ public class ArbolController implements Initializable {
         }
     }
 
-    public void setArbol(ArbolDesicion arbol) {
+    public void setArbol(ArbolDecision arbol) {
         this.arbol = arbol;
         if (this.menuService != null) {
             activar();

@@ -3,7 +3,7 @@ package com.akinator.service.impl;
 import java.io.File;
 import java.util.List;
 
-import com.akinator.modelo.ArbolDesicion;
+import com.akinator.modelo.ArbolDecision;
 import com.akinator.repository.ArbolRepository;
 import com.akinator.service.ArbolVisualService;
 import com.akinator.service.CanvasInteraccionService;
@@ -12,13 +12,13 @@ import com.akinator.service.ArbolCapaService;
 
 public class MenuServiceImpl implements MenuService {
 
-    private final ArbolDesicion arbol;
+    private final ArbolDecision arbol;
     private final ArbolRepository repository;
     private final ArbolVisualService visualService;
     private final ArbolCapaService arbolCapaService;
     private final CanvasInteraccionService canvasInteraccionService;
 
-    public MenuServiceImpl(ArbolDesicion arbol,
+    public MenuServiceImpl(ArbolDecision arbol,
                           ArbolRepository repository,
                           ArbolVisualService visualService) {
         this.arbol = arbol;

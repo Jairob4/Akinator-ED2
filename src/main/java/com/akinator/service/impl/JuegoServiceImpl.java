@@ -1,16 +1,16 @@
 package com.akinator.service.impl;
 
 import com.akinator.ResultadoPartida;
-import com.akinator.modelo.ArbolDesicion;
+import com.akinator.modelo.ArbolDecision;
 import com.akinator.repository.ArbolRepository;
 import com.akinator.service.JuegoService;
 
 public class JuegoServiceImpl implements JuegoService {
 
-    private final ArbolDesicion arbol;
+    private final ArbolDecision arbol;
     private final ArbolRepository repository;
 
-    public JuegoServiceImpl(ArbolDesicion arbol,
+    public JuegoServiceImpl(ArbolDecision arbol,
                             ArbolRepository repository) {
         this.arbol = arbol;
         this.repository = repository;

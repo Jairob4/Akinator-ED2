@@ -1,15 +1,15 @@
 package com.akinator.service.impl;
 
 import com.akinator.modelo.dto.*;
-import com.akinator.modelo.ArbolDesicion;
+import com.akinator.modelo.ArbolDecision;
 import com.akinator.modelo.NodoArbol;
 import com.akinator.service.ArbolVisualService;
 
 import java.util.*;
 
 public class ArbolVisualServiceImpl implements ArbolVisualService {
-    private final ArbolDesicion arbol;
-    public ArbolVisualServiceImpl(ArbolDesicion arbol) {
+    private final ArbolDecision arbol;
+    public ArbolVisualServiceImpl(ArbolDecision arbol) {
         this.arbol = arbol;
     }
 

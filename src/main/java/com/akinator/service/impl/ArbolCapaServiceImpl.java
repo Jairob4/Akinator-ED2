@@ -2,7 +2,7 @@ package com.akinator.service.impl;
 
 import java.util.*;
 
-import com.akinator.modelo.ArbolDesicion;
+import com.akinator.modelo.ArbolDecision;
 import com.akinator.modelo.dto.NodoVistaDTO;
 import com.akinator.service.ArbolCapaService;
 

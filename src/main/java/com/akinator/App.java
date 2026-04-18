@@ -1,7 +1,7 @@
 package com.akinator;
 
 import com.akinator.controlador.*;
-import com.akinator.modelo.ArbolDesicion;
+import com.akinator.modelo.ArbolDecision;
 import com.akinator.repository.impl.ArbolSerializer;
 import com.akinator.service.JuegoService;
 import com.akinator.service.MenuService;
@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     public static Stage stagePrincipal;
-    public static ArbolDesicion arbol; // árbol compartido entre pantallas
+    public static ArbolDecision arbol; // árbol compartido entre pantallas
     public static ArbolSerializer ArbolSerializer = new ArbolSerializer();
 
     // SERVICIOS

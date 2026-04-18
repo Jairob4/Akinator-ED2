@@ -1,6 +1,6 @@
 package com.akinator.repository.impl;
 
-import com.akinator.modelo.ArbolDesicion;
+import com.akinator.modelo.ArbolDecision;
 import com.akinator.repository.ArbolRepository;
 
 import java.io.*;
@@ -17,7 +17,7 @@ public class ArbolSerializer implements ArbolRepository {
         
 
     @Override
-    public void guardar(ArbolDesicion arbol) {
+    public void guardar(ArbolDecision arbol) {
         try (ObjectOutputStream oos =
                  new ObjectOutputStream(new FileOutputStream(ruta))) {
 
@@ -29,24 +29,24 @@ public class ArbolSerializer implements ArbolRepository {
     }
 
     @Override
-    public ArbolDesicion cargar() {
+    public ArbolDecision cargar() {
 
         if (!Files.exists(Paths.get(ruta))) {
-            return new ArbolDesicion();
+            return new ArbolDecision();
         }
 
         try (ObjectInputStream ois =
                  new ObjectInputStream(new FileInputStream(ruta))) {
 
-            ArbolDesicion arbol =
-                    (ArbolDesicion) ois.readObject();
+            ArbolDecision arbol =
+                    (ArbolDecision) ois.readObject();
 
             arbol.reiniciarPartida();
             return arbol;
 
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Error al cargar: " + e.getMessage());
-            return new ArbolDesicion();
+            return new ArbolDecision();
         }
     }
 }

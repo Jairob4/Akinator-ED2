@@ -1,6 +1,6 @@
 package com.akinator.service;
 
-import com.akinator.modelo.ArbolDesicion;
+import com.akinator.modelo.ArbolDecision;
 import com.akinator.modelo.NodoArbol;
 
 public interface EstrategiaSeleccionPreguntas {

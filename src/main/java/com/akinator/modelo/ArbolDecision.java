@@ -7,7 +7,7 @@ import com.akinator.ResultadoPartida;
 import com.akinator.service.EstrategiaSeleccionPreguntas;
 import com.akinator.service.impl.EstrategiaGreedy;
 /**
- * Árbol binario de decisión del Akinator.
+ * Árbol binario de decisión del Akinator
  *
  * TÉCNICAS IMPLEMENTADAS:
  * 1. BACKTRACKING - pila de estados para retroceder
@@ -15,8 +15,7 @@ import com.akinator.service.impl.EstrategiaGreedy;
  * 3. RECURSIVIDAD - recorridos, altura, búsqueda
  */
 
-// n va a la profundidad del nodo.
-public class ArbolDesicion implements Serializable{
+public class ArbolDecision implements Serializable{
     private final static long serialVersionUID = 1L;
 
     //Estado actual del juego
@@ -42,7 +41,7 @@ public class ArbolDesicion implements Serializable{
     private transient EstrategiaSeleccionPreguntas estrategia;
 
 
-    public ArbolDesicion() {
+    public ArbolDecision() {
         pilaEstados = new ArrayDeque<>();
         pilaRespuestas = new ArrayDeque<>();
         memoria = new HashMap<>();

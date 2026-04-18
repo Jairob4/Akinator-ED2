@@ -1,10 +1,10 @@
 package com.akinator.repository;
 
-import com.akinator.modelo.ArbolDesicion;
+import com.akinator.modelo.ArbolDecision;
 
 public interface ArbolRepository {
 
-    void guardar(ArbolDesicion arbol);
+    void guardar(ArbolDecision arbol);
 
-    ArbolDesicion cargar();
+    ArbolDecision cargar();
 }
