@@ -127,7 +127,7 @@ public class ArbolDesicion implements Serializable{
         tienePoderes.setHijoDerecho(esMarvel);
         tienePoderes.setHijoIzquierdo(esProtagonista);
 
-        raiz = new NodoArbol("¿Es un humano real?");
+        raiz = new NodoArbol("¿Es un personaje real?");
         raiz.setHijoDerecho(esPresidente);
         raiz.setHijoIzquierdo(tienePoderes);
     }
