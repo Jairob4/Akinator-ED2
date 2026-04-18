@@ -46,11 +46,17 @@
     </HBox>
 
     
-    <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS">
-        <Canvas fx:id="canvasArbol"
-                width="660"
-                height="350"/>
-    </ScrollPane>
+    <ScrollPane fx:id="scrollPane"
+            pannable="true"
+            fitToWidth="false"
+            fitToHeight="false"
+            HBox.hgrow="ALWAYS"
+            VBox.vgrow="ALWAYS"
+            style="-fx-background-color: transparent;">
+    <content>
+        <Canvas fx:id="canvasArbol" width="2000" height="1500" />
+    </content>
+</ScrollPane>
 
     <!-- LEYENDA -->
     <HBox alignment="CENTER" spacing="20" styleClass="footer-juego">

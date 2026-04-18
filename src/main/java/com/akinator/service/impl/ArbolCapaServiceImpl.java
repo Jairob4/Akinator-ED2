@@ -41,15 +41,21 @@ public class ArbolCapaServiceImpl implements ArbolCapaService {
         }
 
         //  Asignar posiciones
+
+        double canvasWidth = 2000;
         for (Map.Entry<Integer, List<NodoVistaDTO>> entry : porNivel.entrySet()) {
 
             int nivel = entry.getKey();
             List<NodoVistaDTO> lista = entry.getValue();
 
+            double anchoTotal = (lista.size()-1)*ESPACIO_HORIZONTAL;
+
+            double inicioX = (canvasWidth-anchoTotal)/2;
+
             for (int i = 0; i < lista.size(); i++) {
 
-                double x = i * ESPACIO_HORIZONTAL;
-                double y = nivel * ESPACIO_VERTICAL;
+                double x = inicioX + i * ESPACIO_HORIZONTAL;
+                double y = nivel * ESPACIO_VERTICAL+60;
 
                 posiciones.put(
                         lista.get(i).getId(),
@@ -69,7 +75,7 @@ public class ArbolCapaServiceImpl implements ArbolCapaService {
             return niveles.get(nodo.getId());
         }
 
-        // Si no tiene padre → raíz
+        // Si no tiene padre - raíz
         if (nodo.getIdPadre() == -1) {
             niveles.put(nodo.getId(), 0);
             return 0;

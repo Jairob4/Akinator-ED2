@@ -6,6 +6,7 @@ import java.util.List;
 import com.akinator.modelo.ArbolDesicion;
 import com.akinator.repository.ArbolRepository;
 import com.akinator.service.ArbolVisualService;
+import com.akinator.service.CanvasInteraccionService;
 import com.akinator.service.MenuService;
 import com.akinator.service.ArbolCapaService;
 
@@ -15,6 +16,7 @@ public class MenuServiceImpl implements MenuService {
     private final ArbolRepository repository;
     private final ArbolVisualService visualService;
     private final ArbolCapaService arbolCapaService;
+    private final CanvasInteraccionService canvasInteraccionService;
 
     public MenuServiceImpl(ArbolDesicion arbol,
                           ArbolRepository repository,
@@ -23,6 +25,7 @@ public class MenuServiceImpl implements MenuService {
         this.repository = repository;
         this.visualService = visualService;
         this.arbolCapaService = new ArbolCapaServiceImpl();
+        this.canvasInteraccionService = new CanvasInteraccionServiceImpl();
     }
 
     @Override
@@ -70,5 +73,10 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public ArbolCapaService getArbolCapaService() {
         return arbolCapaService;
+    }
+
+    @Override
+    public CanvasInteraccionService getCanvasInteraccionService(){
+        return canvasInteraccionService;
     }
 }

@@ -10,12 +10,9 @@ import com.akinator.service.impl.EstrategiaGreedy;
  * Árbol binario de decisión del Akinator.
  *
  * TÉCNICAS IMPLEMENTADAS:
- * ┌─────────────────────────────────────────────────────────────┐
- * │ 1. BACKTRACKING  → pila de estados para retroceder         │
- * │ 2. GREEDY        → elegir pregunta que mejor divide        │
- * │ 3. PROG. DINÁMICA→ memoización de rutas por personaje      │
- * │ 4. RECURSIVIDAD  → recorridos, altura, búsqueda            │
- * └─────────────────────────────────────────────────────────────┘
+ * 1. BACKTRACKING - pila de estados para retroceder
+ * 2. PROG. DINÁMICA - memoización de rutas por personaje
+ * 3. RECURSIVIDAD - recorridos, altura, búsqueda
  */
 
 // n va a la profundidad del nodo.
@@ -55,29 +52,84 @@ public class ArbolDesicion implements Serializable{
 
     //aca ponemos algunas preguntas y personajes para que el juego tenga algo de contenido al iniciar, luego se pueden agregar más o modificar, aparte luego haremos que el usuario pueda agregar sus propias preguntas y personajes
     private void construirArbolInicial() {
-        raiz = new NodoArbol("¿Es un humano real?"); // pregunta base
 
-        // Personajes
-        NodoArbol einstein = new NodoArbol("Albert Einstein", true);
-        NodoArbol napoleon = new NodoArbol("Napoleon Bonaparte", true);
-        NodoArbol goku = new NodoArbol("Goku", true);
-        NodoArbol batman = new NodoArbol("Batman", true);
+        NodoArbol trump       = new NodoArbol("Donald Trump", true);
+        NodoArbol obama       = new NodoArbol("Barack Obama", true);
+        NodoArbol lincoln     = new NodoArbol("Abraham Lincoln", true);
+        NodoArbol bolivar     = new NodoArbol("Simón Bolívar", true);
+        NodoArbol einstein    = new NodoArbol("Albert Einstein", true);
+        NodoArbol curie       = new NodoArbol("Marie Curie", true);
+        NodoArbol napoleon    = new NodoArbol("Napoleón Bonaparte", true);
+        NodoArbol davinci     = new NodoArbol("Leonardo Da Vinci", true);
 
-        // Nivel 1
-        NodoArbol cientifico = new NodoArbol("¿Es o fue un científico?");
-        cientifico.setHijoDerecho(einstein); // respuesta "sí" lleva a Einstein
-        cientifico.setHijoIzquierdo(napoleon); // respuesta "no" lleva a Napoleon
+        NodoArbol wolverine   = new NodoArbol("Wolverine", true);
+        NodoArbol spiderman   = new NodoArbol("Spider-Man", true);
+        NodoArbol thanos      = new NodoArbol("Thanos", true);
+        NodoArbol ironman     = new NodoArbol("Iron Man", true);
+        NodoArbol walter      = new NodoArbol("Walter White", true);
+        NodoArbol jonsnow     = new NodoArbol("Jon Snow", true);
+        NodoArbol hannibal    = new NodoArbol("Hannibal Lecter", true);
+        NodoArbol tyrion      = new NodoArbol("Tyrion Lannister", true);
 
-        NodoArbol poderes = new NodoArbol("¿Tiene poderes sobrenaturales?");
-        poderes.setHijoDerecho(goku); // respuesta "sí" lleva a Goku
-        poderes.setHijoIzquierdo(batman); // respuesta "no" lleva a Batman
+        NodoArbol esAmericano = new NodoArbol("¿Es o fue americano (EEUU)?");
+        esAmericano.setHijoDerecho(trump);
+        esAmericano.setHijoIzquierdo(obama);
 
-        // Nivel 0 (raíz)
-        raiz.setHijoDerecho(cientifico); // respuesta "sí" lleva a científico
-        raiz.setHijoIzquierdo(poderes); // respuesta "no" lleva a futbolista
+        NodoArbol murio20 = new NodoArbol("¿Murió en el siglo XX?");
+        murio20.setHijoDerecho(lincoln);
+        murio20.setHijoIzquierdo(bolivar);
 
-        
+        NodoArbol sigueVivo = new NodoArbol("¿Sigue vivo actualmente?");
+        sigueVivo.setHijoDerecho(esAmericano);
+        sigueVivo.setHijoIzquierdo(murio20);
 
+        NodoArbol esFisico = new NodoArbol("¿Es o fue físico?");
+        esFisico.setHijoDerecho(einstein);
+        esFisico.setHijoIzquierdo(curie);
+
+        NodoArbol esMilitar = new NodoArbol("¿Es o fue militar?");
+        esMilitar.setHijoDerecho(napoleon);
+        esMilitar.setHijoIzquierdo(davinci);
+
+        NodoArbol esCientifico = new NodoArbol("¿Es o fue científico?");
+        esCientifico.setHijoDerecho(esFisico);
+        esCientifico.setHijoIzquierdo(esMilitar);
+
+        NodoArbol esPresidente = new NodoArbol("¿Es o fue presidente?");
+        esPresidente.setHijoDerecho(sigueVivo);
+        esPresidente.setHijoIzquierdo(esCientifico);
+
+        NodoArbol esMutante = new NodoArbol("¿Es mutante?");
+        esMutante.setHijoDerecho(wolverine);
+        esMutante.setHijoIzquierdo(spiderman);
+
+        NodoArbol esVillanoMarvel = new NodoArbol("¿Es villano?");
+        esVillanoMarvel.setHijoDerecho(thanos);
+        esVillanoMarvel.setHijoIzquierdo(ironman);
+
+        NodoArbol esMarvel = new NodoArbol("¿Es de Marvel?");
+        esMarvel.setHijoDerecho(esMutante);
+        esMarvel.setHijoIzquierdo(esVillanoMarvel);
+
+        NodoArbol esBreakingBad = new NodoArbol("¿Es de Breaking Bad?");
+        esBreakingBad.setHijoDerecho(walter);
+        esBreakingBad.setHijoIzquierdo(jonsnow);
+
+        NodoArbol esVillanoSerie = new NodoArbol("¿Es villano?");
+        esVillanoSerie.setHijoDerecho(hannibal);
+        esVillanoSerie.setHijoIzquierdo(tyrion);
+
+        NodoArbol esProtagonista = new NodoArbol("¿Es el protagonista de su serie?");
+        esProtagonista.setHijoDerecho(esBreakingBad);
+        esProtagonista.setHijoIzquierdo(esVillanoSerie);
+
+        NodoArbol tienePoderes = new NodoArbol("¿Tiene superpoderes?");
+        tienePoderes.setHijoDerecho(esMarvel);
+        tienePoderes.setHijoIzquierdo(esProtagonista);
+
+        raiz = new NodoArbol("¿Es un humano real?");
+        raiz.setHijoDerecho(esPresidente);
+        raiz.setHijoIzquierdo(tienePoderes);
     }
 
     public void reiniciarPartida() {
@@ -195,8 +247,6 @@ public class ArbolDesicion implements Serializable{
         // eliminar la ruta memorizada del personaje viejo, ya que ahora ese nodo es una pregunta
         memoria.remove(nombrePersonajeViejo);
 
-        List<Boolean> rutaBase = reconstruirRutaDesdePila(); // Reconstruir la ruta base desde la raíz hasta el nodo actual
-
         // almacenar la nueva ruta para el nuevo personaje y hasta el nuevo nodo del personaje viejo con programacion dinamica
         // reconstruimos la ruta a traves de la solucion parcial guardada en la pila
         List<Boolean> respuestasPartida = new ArrayList<>(pilaRespuestas);
@@ -234,36 +284,7 @@ public class ArbolDesicion implements Serializable{
         return ruta;
     }
 
-     /* Estrategia Greedy:
-        calcula qué tan buena es una pregunta para dividir el árbol, y elige la mejor pregunta según esa métrica
-        O(n) para evaluar todas las preguntas disponibles en el nodo actual, donde n es el número de preguntas hijas del nodo actual
-     */
-
-    /**
-        GREEDY: calcula qué tan buena es una pregunta para dividir el árbol. 
-        Score = 0 es perfecto (divide 50/50).
-
-        si una pregunta es muy buena para dividir el árbol, entonces va a tener un score cercano a 0, lo que significa que divide el árbol en partes iguales (50/50).
-     
-        Complejidad: O(n) donde n = personajes en el árbol
-     */
-
-    public double scoreGreedy(String pregunta) {
-        List<String> personajes = obtenerTodosPersonajes();
-        int total = personajes.size();
-        if (total == 0) return 1.0;
-
-        // Simulamos cuántos personajes irían a SI y cuántos a NO
-        // En una implementación real, tendriamos que usar una entropia (modelo de ML), pero aca usamos una heuristica
-        // Aquí usamos heurística basada en longitud de pregunta
-        int estimadoSi = total / 2;
-        int estimadoNo = total - estimadoSi;
-        return Math.abs(estimadoSi - estimadoNo) / (double) total;
-        // 0.0 = división perfecta (óptimo greedy)
-        // 1.0 = toda la carga en un lado (pésimo)
-    }
-
-     /* Metodo axuliliar para obtener todos los personajes del árbol — O(n) */
+    /* Metodo axuliliar para obtener todos los personajes del árbol — O(n) */
     public List<String> obtenerTodosPersonajes() {
         List<String> lista = new ArrayList<>();
         obtenerPersonajesRec(raiz, lista);

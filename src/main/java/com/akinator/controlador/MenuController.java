@@ -15,7 +15,7 @@ public class MenuController implements Initializable {
     
     private MenuService menuService;
 
-    // ── FXML ──────────────────────────────────────────────────────────────
+    // FXML
     @FXML private Label lblPersonajes;
     @FXML private Label lblNodos;
     @FXML private Label lblAltura;

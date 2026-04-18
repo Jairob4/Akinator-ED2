@@ -22,7 +22,7 @@ public class App extends Application {
     public static ArbolDesicion arbol; // árbol compartido entre pantallas
     public static ArbolSerializer ArbolSerializer = new ArbolSerializer();
 
-    // ── SERVICIOS ─────────────────────────────────────────────────────────
+    // SERVICIOS
     private static JuegoService juegoService;
     private static MenuService menuService;
 

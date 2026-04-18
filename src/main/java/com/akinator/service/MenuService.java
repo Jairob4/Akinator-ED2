@@ -19,4 +19,5 @@ public interface MenuService {
     // Visualización
     ArbolVisualService getVisualizationService();
     ArbolCapaService getArbolCapaService();
+    CanvasInteraccionService getCanvasInteraccionService();
 }

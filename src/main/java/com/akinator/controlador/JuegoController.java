@@ -13,10 +13,10 @@ import java.util.ResourceBundle;
 
 public class JuegoController implements Initializable {
 
-    // ── SERVICIOS ─────────────────────────────────────────────────────────
+    // SERVICIOS
     private JuegoService juegoService;
 
-    // ── FXML ──────────────────────────────────────────────────────────────
+    // FXML
     @FXML private Label    lblPregunta;
     @FXML private Label    lblPreguntaNum;
     @FXML private HBox     panelRespuestas;
@@ -30,7 +30,7 @@ public class JuegoController implements Initializable {
     @FXML private Label    lblMetricaMemoria;
     @FXML private Button   btnRetroceder;
 
-    // ── INYECCIÓN DE DEPENDENCIAS ─────────────────────────────────────────
+    // INYECCIÓN DE DEPENDENCIAS
     public void setJuegoService(JuegoService juegoService) {
         this.juegoService = juegoService;
         // Actualizar UI después de inyectar el servicio
@@ -66,7 +66,7 @@ public class JuegoController implements Initializable {
         btnRetroceder.setDisable(!juegoService.puedoRetroceder());
 
         if (juegoService.juegoTerminado()) {
-            // Llegamos a una hoja → mostrar panel de adivinanza
+            // Llegamos a una hoja - mostrar panel de adivinanza
             mostrarAdivinanza();
         } else {
             // Mostrar pregunta normal
@@ -86,9 +86,7 @@ public class JuegoController implements Initializable {
         mostrarPanel(panelAprendizaje, false);
     }
 
-    // ─────────────────────────────────────────────────────────────────────
     // RESULTADO: ACERTÓ O FALLÓ
-    // ─────────────────────────────────────────────────────────────────────
 
     @FXML
     private void onAcertó() {
@@ -112,9 +110,7 @@ public class JuegoController implements Initializable {
         txtNuevaPregunta.clear();
     }
 
-    // ─────────────────────────────────────────────────────────────────────
     // APRENDIZAJE
-    // ─────────────────────────────────────────────────────────────────────
 
     @FXML
     private void onAprender_Si() { aprender(true); }
@@ -147,9 +143,7 @@ public class JuegoController implements Initializable {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────
     // BACKTRACKING MANUAL (botón retroceder)
-    // ─────────────────────────────────────────────────────────────────────
 
     @FXML
     private void onRetroceder() {
@@ -158,9 +152,7 @@ public class JuegoController implements Initializable {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────
     // NAVEGACIÓN
-    // ─────────────────────────────────────────────────────────────────────
 
     @FXML
     private void onVolverMenu() {
@@ -171,9 +163,7 @@ public class JuegoController implements Initializable {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────
     // UTILIDADES
-    // ─────────────────────────────────────────────────────────────────────
 
     private void mostrarPanel(javafx.scene.Node panel, boolean visible) {
         panel.setVisible(visible);

@@ -2,6 +2,7 @@ com\akinator\modelo\dto\NodoVistaDTO.class
 com\akinator\repository\ArbolRepository.class
 com\akinator\controlador\MenuController.class
 com\akinator\service\ArbolVisualService.class
+com\akinator\service\impl\CanvasInteraccionServiceImpl.class
 com\akinator\modelo\ArbolDesicion.class
 com\akinator\ResultadoPartida.class
 com\akinator\repository\impl\ArbolSerializer.class
@@ -18,4 +19,5 @@ com\akinator\service\JuegoService.class
 com\akinator\service\MenuService.class
 com\akinator\App.class
 com\akinator\service\impl\MenuServiceImpl.class
+com\akinator\service\CanvasInteraccionService.class
 com\akinator\controlador\EstadisticasController.class

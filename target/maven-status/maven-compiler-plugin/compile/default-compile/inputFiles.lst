@@ -1,5 +1,6 @@
 C:\Users\User\OneDrive\Escritorio\monis\ED2\Akinator\src\main\java\com\akinator\controlador\MenuController.java
 C:\Users\User\OneDrive\Escritorio\monis\ED2\Akinator\src\main\java\com\akinator\service\EstrategiaSeleccionPreguntas.java
+C:\Users\User\OneDrive\Escritorio\monis\ED2\Akinator\src\main\java\com\akinator\service\impl\CanvasInteraccionServiceImpl.java
 C:\Users\User\OneDrive\Escritorio\monis\ED2\Akinator\src\main\java\com\akinator\service\impl\MenuServiceImpl.java
 C:\Users\User\OneDrive\Escritorio\monis\ED2\Akinator\src\main\java\com\akinator\modelo\dto\NodoVistaDTO.java
 C:\Users\User\OneDrive\Escritorio\monis\ED2\Akinator\src\main\java\com\akinator\service\ArbolCapaService.java
@@ -8,6 +9,7 @@ C:\Users\User\OneDrive\Escritorio\monis\ED2\Akinator\src\main\java\com\akinator\
 C:\Users\User\OneDrive\Escritorio\monis\ED2\Akinator\src\main\java\com\akinator\controlador\JuegoController.java
 C:\Users\User\OneDrive\Escritorio\monis\ED2\Akinator\src\main\java\com\akinator\service\impl\ArbolCapaServiceImpl.java
 C:\Users\User\OneDrive\Escritorio\monis\ED2\Akinator\src\main\java\com\akinator\service\ArbolVisualService.java
+C:\Users\User\OneDrive\Escritorio\monis\ED2\Akinator\src\main\java\com\akinator\service\CanvasInteraccionService.java
 C:\Users\User\OneDrive\Escritorio\monis\ED2\Akinator\src\main\java\com\akinator\service\JuegoService.java
 C:\Users\User\OneDrive\Escritorio\monis\ED2\Akinator\src\main\java\com\akinator\service\MenuService.java
 C:\Users\User\OneDrive\Escritorio\monis\ED2\Akinator\src\main\java\com\akinator\modelo\NodoArbol.java
